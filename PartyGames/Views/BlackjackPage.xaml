@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PartyGames.Views.BlackjackPage"
+             Title="Blackjack">
+
+    <VerticalStackLayout
+        Padding="20"
+        Spacing="20"
+        VerticalOptions="FillAndExpand"
+        BackgroundColor="#2D5016">
+
+        <!-- Title -->
+        <Label
+            Text="♠️ BLACKJACK ♠️"
+            FontSize="26"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"
+            TextColor="White" />
+
+        <!-- Coming Soon Message -->
+        <Frame
+            CornerRadius="15"
+            Padding="30"
+            BackgroundColor="#FFD700"
+            BorderColor="#FF9500"
+            HasShadow="True"
+            VerticalOptions="CenterAndExpand">
+            <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                <Label
+                    Text="🎴"
+                    FontSize="48"
+                    HorizontalTextAlignment="Center" />
+                <Label
+                    Text="Blackjack Game"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    TextColor="#333333"
+                    HorizontalTextAlignment="Center" />
+                <Label
+                    Text="Coming Soon in Phase 2!"
+                    FontSize="14"
+                    TextColor="#666666"
+                    HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Frame>
+
+        <!-- Spacer -->
+        <BoxView HeightRequest="1" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" />
+
+        <!-- Back Button -->
+        <Button
+            Text="← Back to Games"
+            CornerRadius="10"
+            BackgroundColor="#E8E8E8"
+            TextColor="#333333"
+            FontSize="14"
+            Padding="20,10" />
+    </VerticalStackLayout>
+
+</ContentPage>
+

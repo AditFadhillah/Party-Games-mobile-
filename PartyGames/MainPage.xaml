@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PartyGames.MainPage"
+             Title="Party Games">
+
+    <VerticalStackLayout
+        Padding="20"
+        Spacing="15"
+        VerticalOptions="FillAndExpand"
+        BackgroundColor="#F5F5F5">
+        
+        <!-- Title -->
+        <Label
+            Text="PARTY GAMES"
+            FontSize="28"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"
+            Margin="0,20,0,10" />
+
+        <!-- Subtitle -->
+        <Label
+            Text="Select a game to play"
+            FontSize="14"
+            TextColor="#666666"
+            HorizontalTextAlignment="Center"
+            Margin="0,0,0,20" />
+
+        <!-- Games List -->
+        <StackLayout
+            Spacing="15"
+            VerticalOptions="FillAndExpand"
+            Padding="0,20,0,20">
+            
+            <Button
+                x:Name="DiceRollerButton"
+                Text="🎲 Dice Roller"
+                Clicked="OnDiceRollerClicked"
+                CornerRadius="15"
+                BackgroundColor="White"
+                TextColor="#333333"
+                FontSize="16"
+                FontAttributes="Bold"
+                Padding="20,20" />
+
+            <Button
+                x:Name="BlackjackButton"
+                Text="🃏 Blackjack"
+                Clicked="OnBlackjackClicked"
+                CornerRadius="15"
+                BackgroundColor="White"
+                TextColor="#333333"
+                FontSize="16"
+                FontAttributes="Bold"
+                Padding="20,20" />
+
+            <Button
+                x:Name="CoinFlipButton"
+                Text="🪙 Coin Flip"
+                Clicked="OnCoinFlipClicked"
+                CornerRadius="15"
+                BackgroundColor="White"
+                TextColor="#333333"
+                FontSize="16"
+                FontAttributes="Bold"
+                Padding="20,20" />
+        </StackLayout>
+
+        <!-- Bottom Buttons -->
+        <StackLayout
+            Orientation="Horizontal"
+            Spacing="10"
+            Margin="0,20,0,10">
+            <Button
+                Text="Settings"
+                CornerRadius="10"
+                BackgroundColor="#E8E8E8"
+                TextColor="#333333"
+                FontSize="13"
+                Padding="15,10"
+                HorizontalOptions="FillAndExpand" />
+            <Button
+                Text="High Scores"
+                CornerRadius="10"
+                BackgroundColor="#E8E8E8"
+                TextColor="#333333"
+                FontSize="13"
+                Padding="15,10"
+                HorizontalOptions="FillAndExpand" />
+        </StackLayout>
+    </VerticalStackLayout>
+
+</ContentPage>
+
