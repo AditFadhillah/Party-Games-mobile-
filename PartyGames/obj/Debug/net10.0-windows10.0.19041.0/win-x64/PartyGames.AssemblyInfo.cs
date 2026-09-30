@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PartyGames")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+08847cf2a013f5fd6ef7d5ef32c03d87771fcdde")]
 [assembly: System.Reflection.AssemblyProductAttribute("PartyGames")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PartyGames")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

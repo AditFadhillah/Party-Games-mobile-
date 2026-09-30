@@ -8,21 +8,22 @@
         Padding="20"
         Spacing="15"
         VerticalOptions="FillAndExpand"
-        BackgroundColor="#F5F5F5">
+        BackgroundColor="#2A2A2A">
         
         <!-- Title -->
         <Label
             Text="PARTY GAMES"
-            FontSize="28"
+            FontSize="48"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
-            Margin="0,20,0,10" />
+            Margin="0,20,0,10"
+            TextColor="White" />
 
         <!-- Subtitle -->
         <Label
             Text="Select a game to play"
             FontSize="14"
-            TextColor="#666666"
+            TextColor="#CCCCCC"
             HorizontalTextAlignment="Center"
             Margin="0,0,0,20" />
 
@@ -37,9 +38,9 @@
                 Text="🎲 Dice Roller"
                 Clicked="OnDiceRollerClicked"
                 CornerRadius="15"
-                BackgroundColor="White"
-                TextColor="#333333"
-                FontSize="16"
+                BackgroundColor="#FF9500"
+                TextColor="White"
+                FontSize="18"
                 FontAttributes="Bold"
                 Padding="20,20" />
 
@@ -48,9 +49,9 @@
                 Text="🃏 Blackjack"
                 Clicked="OnBlackjackClicked"
                 CornerRadius="15"
-                BackgroundColor="White"
-                TextColor="#333333"
-                FontSize="16"
+                BackgroundColor="#FF9500"
+                TextColor="White"
+                FontSize="18"
                 FontAttributes="Bold"
                 Padding="20,20" />
 

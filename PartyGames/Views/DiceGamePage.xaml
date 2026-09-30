@@ -29,37 +29,45 @@
                 <!-- Individual Dice -->
                 <HorizontalStackLayout Spacing="30" HorizontalOptions="Center">
                     <Frame
+                        x:Name="Die1Frame"
                         CornerRadius="10"
-                        Padding="20"
+                        Padding="0"
                         BackgroundColor="#FFE6CC"
                         BorderColor="#FF9500"
                         WidthRequest="80"
                         HeightRequest="80"
                         HorizontalOptions="Center">
                         <Label
+                            x:Name="Die1Label"
                             Text="{Binding Die1}"
-                            FontSize="40"
+                            FontSize="36"
                             FontAttributes="Bold"
                             TextColor="#333333"
                             VerticalOptions="Center"
-                            HorizontalOptions="Center" />
+                            VerticalTextAlignment="Center"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center" />
                     </Frame>
 
                     <Frame
+                        x:Name="Die2Frame"
                         CornerRadius="10"
-                        Padding="20"
+                        Padding="0"
                         BackgroundColor="#FFE6CC"
                         BorderColor="#FF9500"
                         WidthRequest="80"
                         HeightRequest="80"
                         HorizontalOptions="Center">
                         <Label
+                            x:Name="Die2Label"
                             Text="{Binding Die2}"
-                            FontSize="40"
+                            FontSize="36"
                             FontAttributes="Bold"
                             TextColor="#333333"
                             VerticalOptions="Center"
-                            HorizontalOptions="Center" />
+                            VerticalTextAlignment="Center"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center" />
                     </Frame>
                 </HorizontalStackLayout>
 
@@ -82,6 +90,7 @@
 
         <!-- Roll Button -->
         <Button
+            x:Name="RollButton"
             Text="🎲 ROLL DICE"
             Command="{Binding RollCommand}"
             CornerRadius="15"
@@ -90,7 +99,8 @@
             FontSize="16"
             FontAttributes="Bold"
             Padding="20,15"
-            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+            Clicked="OnRollButtonClicked" />
 
         <!-- Stats Section -->
         <Frame

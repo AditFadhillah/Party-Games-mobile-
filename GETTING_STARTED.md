@@ -23,27 +23,34 @@ You should see `maui` workload listed.
 
 ## Running the App
 
-### Option 1: Direct Executable (Fastest)
-```powershell
-& ".\PartyGames\bin\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.exe"
-```
+### Recommended: Build and Run Executable (Confirmed Working)
 
-### Option 2: Build and Run from Source
+**If you're in the repo root:**
 ```powershell
 cd PartyGames
 dotnet build -f net10.0-windows10.0.19041.0 -c Debug
-dotnet run -f net10.0-windows10.0.19041.0
+.\bin\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.exe
 ```
 
-### Option 3: Build Only (Then Run Manually)
+**If you're already in the PartyGames folder:**
 ```powershell
-cd PartyGames
+dotnet build -f net10.0-windows10.0.19041.0 -c Debug
+.\bin\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.exe
+```
+
+### Quick Run (If Already Built)
+```powershell
+.\bin\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.exe
+```
+
+### Build Only (Manual Run Later)
+```powershell
 dotnet build -f net10.0-windows10.0.19041.0 -c Debug
 ```
 
-The executable will be generated at:
+The executable will be at:
 ```
-PartyGames/bin/Debug/net10.0-windows10.0.19041.0/win-x64/PartyGames.exe
+bin/Debug/net10.0-windows10.0.19041.0/win-x64/PartyGames.exe
 ```
 
 ---
@@ -126,8 +133,11 @@ PartyGames/
 
 ## Next Steps
 
-- ✅ Button interaction fixed (BorderWidth properties removed)
-- ✅ Game selection navigation working
+- ✅ Button interaction fixed (Navigation service rewritten)
+- ✅ Game selection navigation working (Dice, Coin Flip, Blackjack)
+- ✅ ViewModel dependency injection fixed
+- ✅ InvertedBoolConverter added for XAML bindings
+- ✅ Debug logging implemented (check C:\temp\partygames_debug.log)
 - 🔄 Test Dice Roller and Coin Flip mechanics
 - 📋 Phase 2: Implement Blackjack game logic
 - 🔌 Phase 3: Android/iOS deployment

@@ -7,9 +7,7 @@ public partial class App : Application
 {
 	public App()
 	{
-		File.AppendAllText(@"C:\temp\partygames_debug.log", $"[{DateTime.Now:HH:mm:ss.fff}] [App.ctor] START\n");
 		InitializeComponent();
-		File.AppendAllText(@"C:\temp\partygames_debug.log", $"[{DateTime.Now:HH:mm:ss.fff}] [App.ctor] InitializeComponent completed\n");
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState)

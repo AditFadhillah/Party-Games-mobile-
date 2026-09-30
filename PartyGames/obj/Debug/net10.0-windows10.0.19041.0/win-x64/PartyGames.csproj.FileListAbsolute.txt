@@ -516,3 +516,4 @@ C:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames\obj\Debug\net10.0-windows1
 C:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt
 C:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt.intermediate
 C:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames\obj\Debug\net10.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
+C:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames\obj\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.sourcelink.json
