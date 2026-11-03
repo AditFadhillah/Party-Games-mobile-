@@ -4,6 +4,7 @@
              x:Class="PartyGames.Views.DiceGamePage"
              Title="Dice Roller">
 
+    <ScrollView>
     <VerticalStackLayout
         Padding="20"
         Spacing="20"
@@ -12,28 +13,48 @@
 
         <!-- Title -->
         <Label
-            Text="🎲 DICE ROLLER"
+            Text="DICE ROLLER"
             FontSize="26"
             FontAttributes="Bold"
             HorizontalTextAlignment="Center"
             TextColor="#333333" />
 
+        <!-- Die Type Selector -->
+        <HorizontalStackLayout
+            Spacing="6"
+            HorizontalOptions="Center"
+            BindableLayout.ItemsSource="{Binding DieTypes}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Text="{Binding Name}"
+                        Command="{Binding SelectCommand}"
+                        BackgroundColor="{Binding BackgroundColor}"
+                        TextColor="{Binding TextColor}"
+                        CornerRadius="8"
+                        Padding="0,4"
+                        WidthRequest="40"
+                        FontSize="13" />
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+
         <!-- Dice Display -->
         <Frame
             CornerRadius="15"
-            Padding="30"
+            Padding="20"
             BackgroundColor="White"
             BorderColor="#E0E0E0"
             HasShadow="True">
             <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
                 <!-- Dice Count Selector -->
-                <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
+                <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
                     <Button
                         Text="-"
                         Command="{Binding DecreaseDiceCommand}"
-                        WidthRequest="50"
-                        HeightRequest="50"
-                        CornerRadius="25"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        CornerRadius="20"
                         Padding="0"
                         FontSize="24"
                         BackgroundColor="#E8E8E8"
@@ -49,9 +70,9 @@
                     <Button
                         Text="+"
                         Command="{Binding IncreaseDiceCommand}"
-                        WidthRequest="50"
-                        HeightRequest="50"
-                        CornerRadius="25"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        CornerRadius="20"
                         Padding="0"
                         FontSize="24"
                         BackgroundColor="#E8E8E8"
@@ -59,34 +80,24 @@
                 </HorizontalStackLayout>
 
                 <!-- Individual Dice -->
-                <HorizontalStackLayout
+                <FlexLayout
                     x:Name="DiceRow"
-                    Spacing="10"
+                    Direction="Row"
+                    Wrap="Wrap"
+                    JustifyContent="Center"
                     HorizontalOptions="Center"
                     BindableLayout.ItemsSource="{Binding Dice}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Frame
-                                CornerRadius="10"
-                                Padding="0"
-                                BackgroundColor="#FFE6CC"
-                                BorderColor="#FF9500"
-                                WidthRequest="64"
-                                HeightRequest="64"
-                                HorizontalOptions="Center">
-                                <Label
-                                    Text="{Binding}"
-                                    FontSize="30"
-                                    FontAttributes="Bold"
-                                    TextColor="#333333"
-                                    VerticalOptions="Center"
-                                    HorizontalOptions="Center"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center" />
-                            </Frame>
+                            <GraphicsView
+                                Drawable="{Binding Shape}"
+                                WidthRequest="72"
+                                HeightRequest="72"
+                                Margin="1"
+                                HorizontalOptions="Center" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </HorizontalStackLayout>
+                </FlexLayout>
 
                 <!-- Total -->
                 <StackLayout HorizontalOptions="Center">
@@ -108,7 +119,7 @@
         <!-- Roll Button -->
         <Button
             x:Name="RollButton"
-            Text="🎲 ROLL DICE"
+            Text="ROLL DICE"
             Command="{Binding RollCommand}"
             CornerRadius="15"
             BackgroundColor="#FF9500"
@@ -148,19 +159,17 @@
                         FontSize="12"
                         TextColor="#666666"
                         FontAttributes="Bold" />
-                    <CollectionView
-                        ItemsSource="{Binding RollHistory}"
-                        HeightRequest="40">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout
-                                Orientation="Horizontal"
-                                ItemSpacing="5" />
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
+                    <FlexLayout
+                        Direction="Row"
+                        Wrap="Wrap"
+                        WidthRequest="250"
+                        BindableLayout.ItemsSource="{Binding RollHistory}">
+                        <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Frame
                                     CornerRadius="8"
                                     Padding="8"
+                                    Margin="0,0,5,5"
                                     BackgroundColor="#FFE6CC"
                                     BorderColor="Transparent">
                                     <Label
@@ -170,25 +179,13 @@
                                         FontAttributes="Bold" />
                                 </Frame>
                             </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
         </Frame>
-
-        <!-- Spacer -->
-        <BoxView HeightRequest="1" BackgroundColor="Transparent" />
-
-        <!-- Back Button -->
-        <Button
-            Text="← Back"
-            Command="{Binding BackCommand}"
-            CornerRadius="10"
-            BackgroundColor="#E8E8E8"
-            TextColor="#333333"
-            FontSize="14"
-            Padding="20,10" />
     </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
 

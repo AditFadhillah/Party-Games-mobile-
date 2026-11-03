@@ -8,7 +8,7 @@ namespace PartyGames.Services
     public interface IGameService
     {
         // Dice Game
-        int[] RollDice(int count);
+        int[] RollDice(int count, int sides);
         
         // Coin Flip
         bool FlipCoin();
@@ -27,13 +27,13 @@ namespace PartyGames.Services
         }
 
         /// <summary>
-        /// Simulates rolling the given number of six-sided dice
+        /// Simulates rolling the given number of dice, each with the given number of sides
         /// </summary>
-        public int[] RollDice(int count)
+        public int[] RollDice(int count, int sides)
         {
             var values = new int[count];
             for (int i = 0; i < count; i++)
-                values[i] = _random.Next(1, 7);
+                values[i] = _random.Next(1, sides + 1);
             return values;
         }
 

@@ -12,8 +12,10 @@ namespace PartyGames.ViewModels
         private readonly IGameService _gameService;
         private readonly IScoreService _scoreService;
         private const int MinDice = 1;
-        private const int MaxDice = 6;
+        private const int MaxDice = 8;
+        private static readonly int[] SupportedDieSides = { 4, 6, 8, 10, 12, 20 };
         private int _diceCount = 2;
+        private int _dieSides = 6;
         private int _total = 0;
         private int _bestRoll = 0;
 
@@ -35,8 +37,15 @@ namespace PartyGames.ViewModels
             set => SetProperty(ref _bestRoll, value);
         }
 
+        public int DieSides
+        {
+            get => _dieSides;
+            private set => SetProperty(ref _dieSides, value);
+        }
+
         public ObservableCollection<int> RollHistory { get; }
-        public ObservableCollection<int> Dice { get; }
+        public ObservableCollection<DieResult> Dice { get; }
+        public ObservableCollection<DieTypeOption> DieTypes { get; }
         public ICommand RollCommand { get; }
         public ICommand IncreaseDiceCommand { get; }
         public ICommand DecreaseDiceCommand { get; }
@@ -48,7 +57,11 @@ namespace PartyGames.ViewModels
 
             Title = "Dice Roller";
             RollHistory = new ObservableCollection<int>();
-            Dice = new ObservableCollection<int>();
+            Dice = new ObservableCollection<DieResult>();
+            DieTypes = new ObservableCollection<DieTypeOption>();
+            foreach (int sides in SupportedDieSides)
+                DieTypes.Add(new DieTypeOption(sides, new Command(() => SelectDieType(sides))));
+            UpdateDieTypeSelection();
             ResetDice();
             RollCommand = new Command(OnRoll);
             IncreaseDiceCommand = new Command(() => ChangeDiceCount(1));
@@ -68,11 +81,31 @@ namespace PartyGames.ViewModels
             ResetDice();
         }
 
+        private void SelectDieType(int sides)
+        {
+            if (IsBusy || sides == DieSides)
+                return;
+
+            DieSides = sides;
+            UpdateDieTypeSelection();
+
+            // Best roll and history are only meaningful for a single die type
+            BestRoll = 0;
+            RollHistory.Clear();
+            ResetDice();
+        }
+
+        private void UpdateDieTypeSelection()
+        {
+            foreach (DieTypeOption option in DieTypes)
+                option.IsSelected = option.Sides == DieSides;
+        }
+
         private void ResetDice()
         {
             Dice.Clear();
             for (int i = 0; i < DiceCount; i++)
-                Dice.Add(0);
+                Dice.Add(new DieResult(0, DieSides));
 
             Total = 0;
         }
@@ -87,9 +120,10 @@ namespace PartyGames.ViewModels
                 await Task.Delay(500);
 
                 // Roll the dice
-                int[] values = _gameService.RollDice(DiceCount);
-                for (int i = 0; i < values.Length; i++)
-                    Dice[i] = values[i];
+                int[] values = _gameService.RollDice(DiceCount, DieSides);
+                Dice.Clear();
+                foreach (int value in values)
+                    Dice.Add(new DieResult(value, DieSides));
                 Total = values.Sum();
                 
 
@@ -103,8 +137,8 @@ namespace PartyGames.ViewModels
                 // Add to history
                 RollHistory.Insert(0, Total);
                 
-                // Keep only last 10 rolls
-                if (RollHistory.Count > 10)
+                // Keep only last 30 rolls
+                if (RollHistory.Count > 30)
                 {
                     RollHistory.RemoveAt(RollHistory.Count - 1);
                 }
