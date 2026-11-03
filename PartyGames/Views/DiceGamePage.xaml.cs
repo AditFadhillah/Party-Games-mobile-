@@ -14,24 +14,18 @@ public partial class DiceGamePage : ContentPage
 		BindingContext = viewModel;
 	}
 
-	private async void OnRollButtonClicked(object sender, EventArgs e)
+	private async void OnRollButtonClicked(object? sender, EventArgs e)
 	{
 		if (_isAnimating)
 			return;
 
 		_isAnimating = true;
 		
-		// Start dice shake animation
-		_ = AnimateDiceShake();
-		
-		// Let the command execute normally
-		if (_viewModel.RollCommand is Command cmd && cmd.CanExecute(null))
-		{
-			cmd.Execute(null);
-		}
+		// Start dice shake animation (command will execute via binding)
+		await AnimateDiceShake();
 		
 		// Wait a bit before allowing next animation
-		await Task.Delay(500);
+		await Task.Delay(200);
 		_isAnimating = false;
 	}
 
@@ -40,26 +34,13 @@ public partial class DiceGamePage : ContentPage
 		const uint duration = 70;
 		const double moveDistance = 10;
 
-		// Shake 4 times for a total of ~560ms
+		// Shake the whole dice row 4 times, then return to center
 		for (int i = 0; i < 4; i++)
 		{
-			// Shake left/right
-			await Task.WhenAll(
-				Die1Frame.TranslateTo(-moveDistance, 0, duration, Easing.Linear),
-				Die2Frame.TranslateTo(moveDistance, 0, duration, Easing.Linear)
-			);
-
-			// Shake right/left
-			await Task.WhenAll(
-				Die1Frame.TranslateTo(moveDistance, 0, duration, Easing.Linear),
-				Die2Frame.TranslateTo(-moveDistance, 0, duration, Easing.Linear)
-			);
+			await DiceRow.TranslateToAsync(-moveDistance, 0, duration, Easing.Linear);
+			await DiceRow.TranslateToAsync(moveDistance, 0, duration, Easing.Linear);
 		}
 
-		// Return to center
-		await Task.WhenAll(
-			Die1Frame.TranslateTo(0, 0, 100, Easing.CubicOut),
-			Die2Frame.TranslateTo(0, 0, 100, Easing.CubicOut)
-		);
+		await DiceRow.TranslateToAsync(0, 0, 100, Easing.CubicOut);
 	}
 }

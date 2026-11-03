@@ -11,21 +11,16 @@ namespace PartyGames.ViewModels
     {
         private readonly IGameService _gameService;
         private readonly IScoreService _scoreService;
-        private int _die1 = 0;
-        private int _die2 = 0;
+        private const int MinDice = 1;
+        private const int MaxDice = 6;
+        private int _diceCount = 2;
         private int _total = 0;
         private int _bestRoll = 0;
 
-        public int Die1
+        public int DiceCount
         {
-            get => _die1;
-            set => SetProperty(ref _die1, value);
-        }
-
-        public int Die2
-        {
-            get => _die2;
-            set => SetProperty(ref _die2, value);
+            get => _diceCount;
+            set => SetProperty(ref _diceCount, value);
         }
 
         public int Total
@@ -41,7 +36,10 @@ namespace PartyGames.ViewModels
         }
 
         public ObservableCollection<int> RollHistory { get; }
+        public ObservableCollection<int> Dice { get; }
         public ICommand RollCommand { get; }
+        public ICommand IncreaseDiceCommand { get; }
+        public ICommand DecreaseDiceCommand { get; }
 
         public DiceGameViewModel(IGameService gameService, IScoreService scoreService)
         {
@@ -50,7 +48,33 @@ namespace PartyGames.ViewModels
 
             Title = "Dice Roller";
             RollHistory = new ObservableCollection<int>();
+            Dice = new ObservableCollection<int>();
+            ResetDice();
             RollCommand = new Command(OnRoll);
+            IncreaseDiceCommand = new Command(() => ChangeDiceCount(1));
+            DecreaseDiceCommand = new Command(() => ChangeDiceCount(-1));
+        }
+
+        private void ChangeDiceCount(int delta)
+        {
+            if (IsBusy)
+                return;
+
+            int newCount = Math.Clamp(DiceCount + delta, MinDice, MaxDice);
+            if (newCount == DiceCount)
+                return;
+
+            DiceCount = newCount;
+            ResetDice();
+        }
+
+        private void ResetDice()
+        {
+            Dice.Clear();
+            for (int i = 0; i < DiceCount; i++)
+                Dice.Add(0);
+
+            Total = 0;
         }
 
         private async void OnRoll()
@@ -63,14 +87,12 @@ namespace PartyGames.ViewModels
                 await Task.Delay(500);
 
                 // Roll the dice
-                Total = _gameService.RollDice();
+                int[] values = _gameService.RollDice(DiceCount);
+                for (int i = 0; i < values.Length; i++)
+                    Dice[i] = values[i];
+                Total = values.Sum();
                 
-                // Extract individual dice (this is a simple simulation)
-                Die1 = Total / 2 + (Total % 2 == 0 ? 0 : 1);
-                Die2 = Total - Die1;
-                if (Die2 < 1) Die2 = 1;
-                if (Die1 > 6) Die1 = 6;
-                if (Die2 > 6) Die2 = 6;
+
 
                 // Track best roll
                 if (Total > BestRoll)
@@ -81,8 +103,8 @@ namespace PartyGames.ViewModels
                 // Add to history
                 RollHistory.Insert(0, Total);
                 
-                // Keep only last 5 rolls
-                if (RollHistory.Count > 5)
+                // Keep only last 10 rolls
+                if (RollHistory.Count > 10)
                 {
                     RollHistory.RemoveAt(RollHistory.Count - 1);
                 }

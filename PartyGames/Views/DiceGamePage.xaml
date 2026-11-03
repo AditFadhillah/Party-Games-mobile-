@@ -26,49 +26,66 @@
             BorderColor="#E0E0E0"
             HasShadow="True">
             <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
-                <!-- Individual Dice -->
-                <HorizontalStackLayout Spacing="30" HorizontalOptions="Center">
-                    <Frame
-                        x:Name="Die1Frame"
-                        CornerRadius="10"
+                <!-- Dice Count Selector -->
+                <HorizontalStackLayout Spacing="16" HorizontalOptions="Center">
+                    <Button
+                        Text="-"
+                        Command="{Binding DecreaseDiceCommand}"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        CornerRadius="25"
                         Padding="0"
-                        BackgroundColor="#FFE6CC"
-                        BorderColor="#FF9500"
-                        WidthRequest="80"
-                        HeightRequest="80"
-                        HorizontalOptions="Center">
-                        <Label
-                            x:Name="Die1Label"
-                            Text="{Binding Die1}"
-                            FontSize="36"
-                            FontAttributes="Bold"
-                            TextColor="#333333"
-                            VerticalOptions="Center"
-                            VerticalTextAlignment="Center"
-                            HorizontalOptions="Center"
-                            HorizontalTextAlignment="Center" />
-                    </Frame>
+                        FontSize="24"
+                        BackgroundColor="#E8E8E8"
+                        TextColor="#333333" />
+                    <Label
+                        Text="{Binding DiceCount}"
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="#333333"
+                        WidthRequest="50"
+                        VerticalTextAlignment="Center"
+                        HorizontalTextAlignment="Center" />
+                    <Button
+                        Text="+"
+                        Command="{Binding IncreaseDiceCommand}"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        CornerRadius="25"
+                        Padding="0"
+                        FontSize="24"
+                        BackgroundColor="#E8E8E8"
+                        TextColor="#333333" />
+                </HorizontalStackLayout>
 
-                    <Frame
-                        x:Name="Die2Frame"
-                        CornerRadius="10"
-                        Padding="0"
-                        BackgroundColor="#FFE6CC"
-                        BorderColor="#FF9500"
-                        WidthRequest="80"
-                        HeightRequest="80"
-                        HorizontalOptions="Center">
-                        <Label
-                            x:Name="Die2Label"
-                            Text="{Binding Die2}"
-                            FontSize="36"
-                            FontAttributes="Bold"
-                            TextColor="#333333"
-                            VerticalOptions="Center"
-                            VerticalTextAlignment="Center"
-                            HorizontalOptions="Center"
-                            HorizontalTextAlignment="Center" />
-                    </Frame>
+                <!-- Individual Dice -->
+                <HorizontalStackLayout
+                    x:Name="DiceRow"
+                    Spacing="10"
+                    HorizontalOptions="Center"
+                    BindableLayout.ItemsSource="{Binding Dice}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Frame
+                                CornerRadius="10"
+                                Padding="0"
+                                BackgroundColor="#FFE6CC"
+                                BorderColor="#FF9500"
+                                WidthRequest="64"
+                                HeightRequest="64"
+                                HorizontalOptions="Center">
+                                <Label
+                                    Text="{Binding}"
+                                    FontSize="30"
+                                    FontAttributes="Bold"
+                                    TextColor="#333333"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center" />
+                            </Frame>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </HorizontalStackLayout>
 
                 <!-- Total -->

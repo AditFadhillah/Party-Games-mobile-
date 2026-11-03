@@ -19,7 +19,7 @@ namespace PartyGames.ViewModels
         private static void Log(string message)
         {
             Console.WriteLine(message);
-            File.AppendAllText(@"C:\temp\partygames_debug.log", $"[{DateTime.Now:HH:mm:ss.fff}] {message}\n");
+            File.AppendAllText(Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, "partygames_debug.log"), $"[{DateTime.Now:HH:mm:ss.fff}] {message}\n");
         }
 
         public MainViewModel(IGameService gameService, INavigationService navigationService)
