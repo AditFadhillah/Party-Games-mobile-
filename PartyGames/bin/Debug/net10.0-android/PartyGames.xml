@@ -4,6 +4,42 @@
         <name>PartyGames</name>
     </assembly>
     <members>
+        <member name="T:PartyGames.Features.Blackjack.BlackjackViewModel">
+            <summary>
+            ViewModel for a Blackjack session. Each visit starts with the starting money.
+            </summary>
+        </member>
+        <member name="P:PartyGames.Features.Blackjack.BlackjackViewModel.ShakeHandAsync">
+            <summary>
+            Shakes the hand row from the view. The bool is true for the dealer.
+            </summary>
+        </member>
+        <member name="M:PartyGames.Features.Blackjack.BlackjackViewModel.FinishRoundAsync">
+            <summary>
+            Reveals the dealer's hole card, lets the dealer draw (unless the player busted),
+            then settles the bet after a short pause.
+            </summary>
+        </member>
+        <member name="M:PartyGames.Features.Blackjack.BlackjackViewModel.ShowPlaceholderHands">
+            <summary>
+            Shows two face-down cards for each side while no round is in play.
+            </summary>
+        </member>
+        <member name="M:PartyGames.Features.Blackjack.BlackjackViewModel.HandValue(System.Collections.Generic.IEnumerable{PartyGames.Features.Blackjack.Card})">
+            <summary>
+            Best hand total: aces count as 11 unless that would bust.
+            </summary>
+        </member>
+        <member name="T:PartyGames.Features.Blackjack.Card">
+            <summary>
+            A single playing card. Rank 1 = Ace, 11 = Jack, 12 = Queen, 13 = King.
+            </summary>
+        </member>
+        <member name="P:PartyGames.Features.Blackjack.Card.BaseValue">
+            <summary>
+            Blackjack value before ace adjustment (aces count as 1).
+            </summary>
+        </member>
         <member name="T:PartyGames.Features.CoinFlip.CoinFlipViewModel">
             <summary>
             ViewModel for the Coin Flip Game

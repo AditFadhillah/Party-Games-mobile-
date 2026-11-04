@@ -58,8 +58,9 @@ namespace PartyGames.Services
                             break;
                             
                         case "blackjack":
-                            Log($"[NavigationService] Creating BlackjackPage");
-                            targetPage = new BlackjackPage();
+                            Log($"[NavigationService] Attempting to resolve BlackjackViewModel");
+                            var blackjackVM = _serviceProvider.GetRequiredService<BlackjackViewModel>();
+                            targetPage = new BlackjackPage(blackjackVM);
                             Log($"[NavigationService] BlackjackPage created");
                             break;
                             
