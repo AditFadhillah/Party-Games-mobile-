@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="PartyGames" mvid="c621e1d22c224a56a8a8e9582e0fd1c1">
+  <java-to-managed>
+    <entry java-name="crc6434f76dbf6121bdac/MainActivity" managed-name="PartyGames.MainActivity, PartyGames" managed-type-token-id="33554440" />
+    <entry java-name="crc6434f76dbf6121bdac/MainApplication" managed-name="PartyGames.MainApplication, PartyGames" managed-type-token-id="33554441" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc6434f76dbf6121bdac/MainActivity" managed-name="PartyGames.MainActivity, PartyGames" managed-type-token-id="33554440" />
+    <entry java-name="crc6434f76dbf6121bdac/MainApplication" managed-name="PartyGames.MainApplication, PartyGames" managed-type-token-id="33554441" />
+  </managed-to-java>
+</api>

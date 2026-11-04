@@ -49,11 +49,41 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
-[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/MainPage.xaml]
+[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Features/Blackjack/BlackjackPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.MainPage.xaml
-build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
-build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Features.Blackjack.BlackjackPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Features\Blackjack\BlackjackPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Features\Blackjack\BlackjackPage.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Features/CoinFlip/CoinFlipPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Features.CoinFlip.CoinFlipPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Features\CoinFlip\CoinFlipPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Features\CoinFlip\CoinFlipPage.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Features/DiceRoller/DiceGamePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Features.DiceRoller.DiceGamePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Features\DiceRoller\DiceGamePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Features\DiceRoller\DiceGamePage.xaml
+build_metadata.AdditionalFiles.Inflator = SourceGen
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Features/Main/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Features.Main.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Features\Main\MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Features\Main\MainPage.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
@@ -74,36 +104,6 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
-
-[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Views/BlackjackPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Views.BlackjackPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\BlackjackPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\BlackjackPage.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
-
-[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Views/CoinFlipPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Views.CoinFlipPage.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\CoinFlipPage.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\CoinFlipPage.xaml
-build_metadata.AdditionalFiles.Inflator = SourceGen
-build_metadata.AdditionalFiles.NoWarn = 
-build_metadata.AdditionalFiles.EnableDiagnostics = 
-build_metadata.AdditionalFiles.LineInfo = 
-
-[C:/Users/fadhi/PROJECTS/Party-Games-mobile/PartyGames/Views/DiceGamePage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = PartyGames.Views.DiceGamePage.xaml
-build_metadata.AdditionalFiles.TargetPath = Views\DiceGamePage.xaml
-build_metadata.AdditionalFiles.RelativePath = Views\DiceGamePage.xaml
 build_metadata.AdditionalFiles.Inflator = SourceGen
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
