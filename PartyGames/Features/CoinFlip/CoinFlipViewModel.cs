@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using PartyGames.Services;
 using PartyGames.ViewModels;
@@ -9,37 +10,31 @@ namespace PartyGames.Features.CoinFlip
     /// </summary>
     public class CoinFlipViewModel : BaseViewModel
     {
+        private const string HeadsImage = "gold_coin_sword.png";
+        private const string TailsImage = "gold_coin_skull.png";
+        private const string SpinSwordImage = "gold_coin_spin_sword.png";
+        private const string SpinSkullImage = "gold_coin_spin_skull.png";
+        private const int SpinFrameCount = 12;
+        private const int SpinFrameDelayMs = 80;
+        private const int MaxHistoryCount = 30;
+        private const int RotationStepDegrees = 90;
+        private const int RotationStepsPerCycle = 4;
+
         private readonly IGameService _gameService;
-        private readonly IScoreService _scoreService;
-        private string _coinDisplay = "🪙";
-        private int _wins = 0;
-        private int _losses = 0;
-        private int _streak = 0;
-        private bool _isFlipping = false;
-        private string _resultMessage = "Choose heads or tails";
+        private string _coinImage = HeadsImage;
+        private bool _isFlipping;
+        private double _coinRotation;
 
-        public string CoinDisplay
+        public string CoinImage
         {
-            get => _coinDisplay;
-            set => SetProperty(ref _coinDisplay, value);
+            get => _coinImage;
+            set => SetProperty(ref _coinImage, value);
         }
 
-        public int Wins
+        public double CoinRotation
         {
-            get => _wins;
-            set => SetProperty(ref _wins, value);
-        }
-
-        public int Losses
-        {
-            get => _losses;
-            set => SetProperty(ref _losses, value);
-        }
-
-        public int Streak
-        {
-            get => _streak;
-            set => SetProperty(ref _streak, value);
+            get => _coinRotation;
+            set => SetProperty(ref _coinRotation, value);
         }
 
         public bool IsFlipping
@@ -48,71 +43,49 @@ namespace PartyGames.Features.CoinFlip
             set => SetProperty(ref _isFlipping, value);
         }
 
-        public string ResultMessage
-        {
-            get => _resultMessage;
-            set => SetProperty(ref _resultMessage, value);
-        }
+        public ICommand FlipCommand { get; }
 
-        public ICommand FlipHeadsCommand { get; }
-        public ICommand FlipTailsCommand { get; }
+        public ObservableCollection<string> FlipHistory { get; } = new();
 
-        public CoinFlipViewModel(IGameService gameService, IScoreService scoreService)
+        public CoinFlipViewModel(IGameService gameService)
         {
             _gameService = gameService;
-            _scoreService = scoreService;
 
             Title = "Coin Flip";
-            FlipHeadsCommand = new Command(async () => await OnFlip(true));
-            FlipTailsCommand = new Command(async () => await OnFlip(false));
+            FlipCommand = new Command(async () => await FlipAsync());
         }
 
-        private async Task OnFlip(bool predictHeads)
+        public void ClearHistory() => FlipHistory.Clear();
+
+        private async Task FlipAsync()
         {
             if (IsFlipping)
                 return;
 
             IsFlipping = true;
-            IsBusy = true;
 
             try
             {
-                // Animate coin flip
-                for (int i = 0; i < 10; i++)
-                {
-                    CoinDisplay = i % 2 == 0 ? "🪙" : "🪙";
-                    await Task.Delay(100);
-                }
-
-                // Get result
                 bool isHeads = _gameService.FlipCoin();
-                CoinDisplay = isHeads ? "Heads ✓" : "Tails ✓";
 
-                // Check if prediction was correct
-                bool won = (predictHeads && isHeads) || (!predictHeads && !isHeads);
-
-                if (won)
+                for (int i = 0; i < SpinFrameCount; i++)
                 {
-                    Wins++;
-                    Streak++;
-                    ResultMessage = "🎉 You Won!";
-                }
-                else
-                {
-                    Losses++;
-                    Streak = 0;
-                    ResultMessage = "😞 You Lost!";
+                    bool isSwordFrame = i % 2 == 0;
+                    CoinImage = isSwordFrame ? SpinSwordImage : SpinSkullImage;
+                    CoinRotation = (i % RotationStepsPerCycle) * RotationStepDegrees;
+                    await Task.Delay(SpinFrameDelayMs);
                 }
 
-                // Reset after delay
-                await Task.Delay(2000);
-                CoinDisplay = "🪙";
-                ResultMessage = "Choose heads or tails";
+                CoinRotation = 0;
+                CoinImage = isHeads ? HeadsImage : TailsImage;
+
+                FlipHistory.Insert(0, CoinImage);
+                if (FlipHistory.Count > MaxHistoryCount)
+                    FlipHistory.RemoveAt(FlipHistory.Count - 1);
             }
             finally
             {
                 IsFlipping = false;
-                IsBusy = false;
             }
         }
     }

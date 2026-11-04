@@ -8,7 +8,7 @@
     <VerticalStackLayout
         Padding="20"
         Spacing="20"
-        VerticalOptions="FillAndExpand"
+        VerticalOptions="Fill"
         BackgroundColor="#F5F5F5">
 
         <!-- Title -->
@@ -40,12 +40,12 @@
         </HorizontalStackLayout>
 
         <!-- Dice Display -->
-        <Frame
-            CornerRadius="15"
+        <Border
+            StrokeShape="RoundRectangle 15"
+            Stroke="#E0E0E0"
+            StrokeThickness="1"
             Padding="20"
-            BackgroundColor="White"
-            BorderColor="#E0E0E0"
-            HasShadow="True">
+            BackgroundColor="White">
             <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
                 <!-- Dice Count Selector -->
                 <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
@@ -114,7 +114,7 @@
                         HorizontalOptions="Center" />
                 </StackLayout>
             </VerticalStackLayout>
-        </Frame>
+        </Border>
 
         <!-- Roll Button -->
         <Button
@@ -131,14 +131,14 @@
             Clicked="OnRollButtonClicked" />
 
         <!-- Stats Section -->
-        <Frame
-            CornerRadius="15"
+        <Border
+            StrokeShape="RoundRectangle 15"
+            Stroke="#E0E0E0"
+            StrokeThickness="1"
             Padding="15"
-            BackgroundColor="White"
-            BorderColor="#E0E0E0"
-            HasShadow="True">
+            BackgroundColor="White">
             <HorizontalStackLayout Spacing="20">
-                <VerticalStackLayout HorizontalOptions="FillAndExpand">
+                <VerticalStackLayout HorizontalOptions="Fill">
                     <Label
                         Text="Best Roll"
                         FontSize="12"
@@ -153,7 +153,7 @@
 
                 <BoxView WidthRequest="1" BackgroundColor="#E0E0E0" />
 
-                <VerticalStackLayout HorizontalOptions="FillAndExpand">
+                <VerticalStackLayout HorizontalOptions="Fill">
                     <Label
                         Text="Last Rolls"
                         FontSize="12"
@@ -166,24 +166,23 @@
                         BindableLayout.ItemsSource="{Binding RollHistory}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
-                                <Frame
-                                    CornerRadius="8"
+                                <Border
+                                    StrokeShape="RoundRectangle 8"
                                     Padding="8"
                                     Margin="0,0,5,5"
-                                    BackgroundColor="#FFE6CC"
-                                    BorderColor="Transparent">
+                                    BackgroundColor="#FFE6CC">
                                     <Label
                                         Text="{Binding}"
                                         FontSize="12"
                                         TextColor="#333333"
                                         FontAttributes="Bold" />
-                                </Frame>
+                                </Border>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </FlexLayout>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
-        </Frame>
+        </Border>
     </VerticalStackLayout>
     </ScrollView>
 

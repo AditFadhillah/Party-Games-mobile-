@@ -35,7 +35,7 @@ namespace PartyGames.Services
             {
                 Log($"[NavigationService] Starting navigation to: {gameType}");
                 
-                Page targetPage = null;
+                Page? targetPage = null;
                 
                 try
                 {
@@ -78,7 +78,7 @@ namespace PartyGames.Services
                     throw new InvalidOperationException($"Failed to create page for game type: {gameType}");
 
                 Log($"[NavigationService] Pushing page to navigation stack");
-                await Application.Current!.MainPage!.Navigation.PushAsync(targetPage);
+                await Application.Current!.Windows[0].Page!.Navigation.PushAsync(targetPage);
                 Log($"[NavigationService] Navigation completed successfully");
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ namespace PartyGames.Services
 
         public async Task GoBackAsync()
         {
-            await Application.Current!.MainPage!.Navigation.PopAsync();
+            await Application.Current!.Windows[0].Page!.Navigation.PopAsync();
         }
     }
 }

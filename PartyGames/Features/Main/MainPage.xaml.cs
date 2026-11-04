@@ -18,12 +18,13 @@ public partial class MainPage : ContentPage
 	{
 		Log("[MainPage.ctor] Constructor called");
 		InitializeComponent();
+		NavigationPage.SetHasNavigationBar(this, false);
 		_viewModel = viewModel;
 		BindingContext = viewModel;
 		Log("[MainPage.ctor] BindingContext set");
 	}
 
-	private void OnDiceRollerClicked(object sender, EventArgs e)
+	private void OnDiceRollerClicked(object? sender, EventArgs e)
 	{
 		Log("[MainPage] OnDiceRollerClicked called");
 		try
@@ -41,7 +42,7 @@ public partial class MainPage : ContentPage
 		}
 	}
 
-	private void OnBlackjackClicked(object sender, EventArgs e)
+	private void OnBlackjackClicked(object? sender, EventArgs e)
 	{
 		Log("[MainPage] OnBlackjackClicked called");
 		try
@@ -59,7 +60,7 @@ public partial class MainPage : ContentPage
 		}
 	}
 
-	private void OnCoinFlipClicked(object sender, EventArgs e)
+	private void OnCoinFlipClicked(object? sender, EventArgs e)
 	{
 		Log("[MainPage] OnCoinFlipClicked called");
 		try
