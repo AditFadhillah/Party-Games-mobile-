@@ -1,7 +1,8 @@
 using System.Windows.Input;
 using PartyGames.Services;
+using PartyGames.ViewModels;
 
-namespace PartyGames.ViewModels
+namespace PartyGames.Features.CoinFlip
 {
     /// <summary>
     /// ViewModel for the Coin Flip Game

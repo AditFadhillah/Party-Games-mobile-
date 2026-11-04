@@ -1,6 +1,7 @@
 using System.Windows.Input;
+using PartyGames.ViewModels;
 
-namespace PartyGames.ViewModels
+namespace PartyGames.Features.DiceRoller
 {
     /// <summary>
     /// Selectable die type (for example d6) shown in the die type selector

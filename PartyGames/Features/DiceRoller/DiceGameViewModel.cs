@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using PartyGames.Services;
+using PartyGames.ViewModels;
 
-namespace PartyGames.ViewModels
+namespace PartyGames.Features.DiceRoller
 {
     /// <summary>
     /// ViewModel for the Dice Game

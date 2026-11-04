@@ -1,6 +1,6 @@
 using Microsoft.Maui.Graphics;
 
-namespace PartyGames.Drawables
+namespace PartyGames.Features.DiceRoller
 {
     /// <summary>
     /// Draws a die as a shape matching its number of sides, with its value centered

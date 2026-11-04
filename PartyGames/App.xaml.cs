@@ -1,5 +1,5 @@
-﻿using PartyGames.Views;
-using PartyGames.ViewModels;
+﻿using PartyGames.Features.Main;
+
 
 namespace PartyGames;
 

@@ -4,14 +4,17 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:PartyGames"
-    xmlns:views="clr-namespace:PartyGames.Views"
+    xmlns:main="clr-namespace:PartyGames.Features.Main"
+    xmlns:dice="clr-namespace:PartyGames.Features.DiceRoller"
+    xmlns:coinflip="clr-namespace:PartyGames.Features.CoinFlip"
+    xmlns:blackjack="clr-namespace:PartyGames.Features.Blackjack"
     Title="PartyGames"
     FlyoutBehavior="Disabled">
 
-    <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
-    <ShellContent Route="dice" ContentTemplate="{DataTemplate views:DiceGamePage}" />
-    <ShellContent Route="coinflip" ContentTemplate="{DataTemplate views:CoinFlipPage}" />
-    <ShellContent Route="blackjack" ContentTemplate="{DataTemplate views:BlackjackPage}" />
+    <ShellContent Route="MainPage" ContentTemplate="{DataTemplate main:MainPage}" />
+    <ShellContent Route="dice" ContentTemplate="{DataTemplate dice:DiceGamePage}" />
+    <ShellContent Route="coinflip" ContentTemplate="{DataTemplate coinflip:CoinFlipPage}" />
+    <ShellContent Route="blackjack" ContentTemplate="{DataTemplate blackjack:BlackjackPage}" />
 
 </Shell>
 

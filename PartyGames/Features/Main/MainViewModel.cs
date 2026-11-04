@@ -2,8 +2,9 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using PartyGames.Models;
 using PartyGames.Services;
+using PartyGames.ViewModels;
 
-namespace PartyGames.ViewModels
+namespace PartyGames.Features.Main
 {
     /// <summary>
     /// ViewModel for the main game selection screen

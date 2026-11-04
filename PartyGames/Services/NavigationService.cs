@@ -1,5 +1,7 @@
-using PartyGames.Views;
-using PartyGames.ViewModels;
+using PartyGames.Features.Blackjack;
+using PartyGames.Features.CoinFlip;
+using PartyGames.Features.DiceRoller;
+
 
 namespace PartyGames.Services
 {

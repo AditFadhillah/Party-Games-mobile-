@@ -1,4 +1,4 @@
-namespace PartyGames.Views;
+namespace PartyGames.Features.Blackjack;
 
 public partial class BlackjackPage : ContentPage
 {

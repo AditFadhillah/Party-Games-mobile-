@@ -2,7 +2,7 @@
 using PartyGames.Models;
 using PartyGames.ViewModels;
 
-namespace PartyGames;
+namespace PartyGames.Features.Main;
 
 public partial class MainPage : ContentPage
 {

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using PartyGames.Services;
-using PartyGames.ViewModels;
-using PartyGames.Views;
+using PartyGames.Features.CoinFlip;
+using PartyGames.Features.DiceRoller;
+using PartyGames.Features.Main;
+
 
 namespace PartyGames;
 

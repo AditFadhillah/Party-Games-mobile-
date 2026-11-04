@@ -1,6 +1,6 @@
 using PartyGames.ViewModels;
 
-namespace PartyGames.Views;
+namespace PartyGames.Features.CoinFlip;
 
 public partial class CoinFlipPage : ContentPage
 {

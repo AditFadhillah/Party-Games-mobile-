@@ -1,6 +1,6 @@
-using PartyGames.Drawables;
 
-namespace PartyGames.ViewModels
+
+namespace PartyGames.Features.DiceRoller
 {
     /// <summary>
     /// A single die result paired with the shape used to draw it
