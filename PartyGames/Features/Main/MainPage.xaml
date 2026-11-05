@@ -35,7 +35,7 @@
             
             <Button
                 x:Name="DiceRollerButton"
-                Text="🎲 Dice Roller"
+                Text="Dice Roller"
                 Clicked="OnDiceRollerClicked"
                 CornerRadius="15"
                 BackgroundColor="#FF9500"
@@ -46,7 +46,7 @@
 
             <Button
                 x:Name="BlackjackButton"
-                Text="🃏 Blackjack"
+                Text="Blackjack"
                 Clicked="OnBlackjackClicked"
                 CornerRadius="15"
                 BackgroundColor="#FF9500"
@@ -57,8 +57,19 @@
 
             <Button
                 x:Name="CoinFlipButton"
-                Text="🪙 Coin Flip"
+                Text="Coin Flip"
                 Clicked="OnCoinFlipClicked"
+                CornerRadius="15"
+                BackgroundColor="#FF9500"
+                TextColor="White"
+                FontSize="16"
+                FontAttributes="Bold"
+                Padding="20,20" />
+
+            <Button
+                x:Name="TicTacToeButton"
+                Text="Tic-Tac-Toe"
+                Clicked="OnTicTacToeClicked"
                 CornerRadius="15"
                 BackgroundColor="#FF9500"
                 TextColor="White"

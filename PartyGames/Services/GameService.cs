@@ -75,6 +75,14 @@ namespace PartyGames.Services
                     Description = "Call heads or tails - test your luck!",
                     IconName = "coin_icon",
                     GameType = "coinflip"
+                },
+                new Game
+                {
+                    Id = 4,
+                    Name = "Tic-Tac-Toe",
+                    Description = "Beat the CPU or play a friend on one board",
+                    IconName = "tictactoe_icon",
+                    GameType = "tictactoe"
                 }
             };
         }

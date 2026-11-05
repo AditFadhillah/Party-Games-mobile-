@@ -1,6 +1,7 @@
 using PartyGames.Features.Blackjack;
 using PartyGames.Features.CoinFlip;
 using PartyGames.Features.DiceRoller;
+using PartyGames.Features.TicTacToe;
 
 
 namespace PartyGames.Services
@@ -62,6 +63,10 @@ namespace PartyGames.Services
                             var blackjackVM = _serviceProvider.GetRequiredService<BlackjackViewModel>();
                             targetPage = new BlackjackPage(blackjackVM);
                             Log($"[NavigationService] BlackjackPage created");
+                            break;
+
+                        case "tictactoe":
+                            targetPage = new TicTacToePage(_serviceProvider.GetRequiredService<TicTacToeViewModel>());
                             break;
                             
                         default:

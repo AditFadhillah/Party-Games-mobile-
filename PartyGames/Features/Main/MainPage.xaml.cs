@@ -77,4 +77,10 @@ public partial class MainPage : ContentPage
 			Log($"[MainPage] Stack: {ex.StackTrace}");
 		}
 	}
+
+	private void OnTicTacToeClicked(object? sender, EventArgs e)
+	{
+		Log("[MainPage] OnTicTacToeClicked called");
+		_viewModel.SelectGameCommand.Execute(new Game { GameType = "tictactoe", Name = "Tic-Tac-Toe" });
+	}
 }

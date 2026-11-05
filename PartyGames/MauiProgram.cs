@@ -4,6 +4,7 @@ using PartyGames.Features.Blackjack;
 using PartyGames.Features.CoinFlip;
 using PartyGames.Features.DiceRoller;
 using PartyGames.Features.Main;
+using PartyGames.Features.TicTacToe;
 
 
 namespace PartyGames;
@@ -34,6 +35,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<CoinFlipViewModel>();
 		// Transient so each visit starts with the starting money
 		builder.Services.AddTransient<BlackjackViewModel>();
+		builder.Services.AddTransient<TicTacToeViewModel>();
 
 		// Note: Don't register Views here - they're created dynamically by NavigationService
 		// Only register MainPage which is created in App.xaml.cs
