@@ -83,6 +83,14 @@ namespace PartyGames.Services
                     Description = "Beat the CPU or play a friend on one board",
                     IconName = "tictactoe_icon",
                     GameType = "tictactoe"
+                },
+                new Game
+                {
+                    Id = 5,
+                    Name = "Higher or Lower",
+                    Description = "Guess if the next card is higher or lower",
+                    IconName = "higherlower_icon",
+                    GameType = "higherlower"
                 }
             };
         }

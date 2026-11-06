@@ -7,6 +7,7 @@ A cross-platform party game app built with .NET MAUI for Android and Windows.
 - **Dice Roller:** Choose d4, d6, d8, d10, d12 or d20 and roll up to 8 dice at once. Roll history keeps the last 30 rolls.
 - **Coin Flip:** Flip a coin.
 - **Tic-Tac-Toe:** Play against a friend or the CPU (Easy, Medium or Hard). Pick X or O for the CPU mode; X always goes first. Scores are tracked for X and O.
+- **Higher or Lower:** Two players share one shuffled 52-card deck (Ace high). Player 1 starts. Guess whether the next card is higher or lower than the card on the discard pile. A correct guess scores for the guessing player; a wrong guess scores for the other player. The game ends when the stack is empty.
 - **Blackjack:** In progress.
 
 ## Requirements
@@ -34,7 +35,7 @@ dotnet build PartyGames\PartyGames.csproj -f net10.0-windows10.0.19041.0 -c Debu
 
 ```
 PartyGames/
-  Features/      Each game in its own folder (Main, DiceRoller, CoinFlip, TicTacToe, Blackjack)
+  Features/      Each game in its own folder (Main, DiceRoller, CoinFlip, TicTacToe, HigherLower, Blackjack)
   ViewModels/    Shared base view model
   Services/      Game, score and navigation services
 ```

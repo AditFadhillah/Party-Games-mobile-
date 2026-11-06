@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PartyGames.Features.HigherLower.HigherLowerPage"
+             Title="Higher or Lower">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="CardTemplate">
+                <Border
+                    WidthRequest="100"
+                    HeightRequest="140"
+                    StrokeShape="RoundRectangle 10"
+                    Stroke="#B0B0B0"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    Padding="6">
+                    <Grid RowDefinitions="Auto,*,Auto">
+                        <Label
+                            Text="{Binding RankText}"
+                            TextColor="{Binding SuitColor}"
+                            FontSize="20"
+                            FontAttributes="Bold" />
+                        <Label
+                            Grid.Row="1"
+                            Text="{Binding SuitSymbol}"
+                            TextColor="{Binding SuitColor}"
+                            FontSize="44"
+                            HorizontalTextAlignment="Center"
+                            VerticalTextAlignment="Center" />
+                        <Label
+                            Grid.Row="2"
+                            Text="{Binding RankText}"
+                            TextColor="{Binding SuitColor}"
+                            FontSize="20"
+                            FontAttributes="Bold"
+                            HorizontalOptions="End" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid
+        RowDefinitions="Auto,*,Auto"
+        RowSpacing="16"
+        Padding="16"
+        BackgroundColor="#2D5016">
+
+        <!-- Header: title and streak -->
+        <Border
+            Grid.Row="0"
+            StrokeShape="RoundRectangle 10"
+            Stroke="#FFD700"
+            StrokeThickness="1"
+            BackgroundColor="#1E3A0F"
+            Padding="12,8">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                <Label
+                    Text="HIGHER OR LOWER"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Column="1"
+                    Text="{Binding ScoreOne, StringFormat='P1: {0}'}"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="#FFD700"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Column="2"
+                    Text="{Binding ScoreTwo, StringFormat='P2: {0}'}"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="#FFD700"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Table: stack, showcase and discard -->
+        <Grid
+            x:Name="Table"
+            Grid.Row="1"
+            RowDefinitions="90,*,*"
+            ColumnDefinitions="*,*"
+            VerticalOptions="Fill">
+
+            <Label
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Text="{Binding StatusMessage}"
+                FontSize="16"
+                TextColor="#FFD700"
+                VerticalTextAlignment="Center"
+                HorizontalTextAlignment="Center" />
+
+            <!-- Discard: declared first so the showcase card flies over it -->
+            <Grid
+                x:Name="DiscardPile"
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                WidthRequest="100"
+                HeightRequest="140"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                BindableLayout.ItemsSource="{Binding Discard}"
+                BindableLayout.ItemTemplate="{StaticResource CardTemplate}" />
+
+            <!-- Showcase: the card currently in play -->
+            <Grid
+                x:Name="ShowcaseView"
+                Grid.Row="1"
+                Grid.Column="0"
+                WidthRequest="100"
+                HeightRequest="140"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Opacity="{Binding ShowcaseOpacity}">
+                <Grid BindingContext="{Binding ShowcaseCard}" WidthRequest="100" HeightRequest="140">
+                    <Border
+                        IsVisible="{Binding IsFaceDown}"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="White"
+                        StrokeThickness="2"
+                        BackgroundColor="#1F4E9A">
+                        <Label
+                            Text="?"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="White"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                    </Border>
+
+                    <Border
+                        IsVisible="{Binding IsFaceDown, Converter={StaticResource InvertedBoolConverter}}"
+                        StrokeShape="RoundRectangle 10"
+                        Stroke="#B0B0B0"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="6">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            <Label
+                                Text="{Binding RankText}"
+                                TextColor="{Binding SuitColor}"
+                                FontSize="20"
+                                FontAttributes="Bold" />
+                            <Label
+                                Grid.Row="1"
+                                Text="{Binding SuitSymbol}"
+                                TextColor="{Binding SuitColor}"
+                                FontSize="44"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Grid.Row="2"
+                                Text="{Binding RankText}"
+                                TextColor="{Binding SuitColor}"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                HorizontalOptions="End" />
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!-- Stack: tap to begin, hidden once empty -->
+            <Border
+                x:Name="StackView"
+                Grid.Row="1"
+                Grid.Column="1"
+                WidthRequest="100"
+                HeightRequest="140"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                StrokeShape="RoundRectangle 8"
+                Stroke="White"
+                StrokeThickness="2"
+                BackgroundColor="#1F4E9A"
+                Opacity="{Binding StackOpacity}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BeginCommand}" />
+                </Border.GestureRecognizers>
+                <Label
+                    Text="?"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+            </Border>
+
+        </Grid>
+
+        <!-- Controls -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10" HeightRequest="130">
+
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="10"
+                IsVisible="{Binding IsPlaying}">
+                <Button
+                    Text="Higher"
+                    HeightRequest="72"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    BackgroundColor="#E8E8E8"
+                    TextColor="#333333"
+                    Command="{Binding HigherCommand}" />
+                <Button
+                    Grid.Column="1"
+                    Text="Lower"
+                    HeightRequest="72"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    BackgroundColor="#E8E8E8"
+                    TextColor="#333333"
+                    Command="{Binding LowerCommand}" />
+            </Grid>
+
+            <Button
+                Text="Play Again"
+                CornerRadius="10"
+                BackgroundColor="#FFD700"
+                TextColor="#333333"
+                IsVisible="{Binding IsGameOver}"
+                Command="{Binding PlayAgainCommand}" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

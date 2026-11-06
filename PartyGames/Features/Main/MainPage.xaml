@@ -76,6 +76,17 @@
                 FontSize="16"
                 FontAttributes="Bold"
                 Padding="20,20" />
+
+            <Button
+                x:Name="HigherLowerButton"
+                Text="Higher or Lower"
+                Clicked="OnHigherLowerClicked"
+                CornerRadius="15"
+                BackgroundColor="#FF9500"
+                TextColor="White"
+                FontSize="16"
+                FontAttributes="Bold"
+                Padding="20,20" />
         </StackLayout>
     </VerticalStackLayout>
 

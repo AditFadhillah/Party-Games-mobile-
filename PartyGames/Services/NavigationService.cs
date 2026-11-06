@@ -1,6 +1,7 @@
 using PartyGames.Features.Blackjack;
 using PartyGames.Features.CoinFlip;
 using PartyGames.Features.DiceRoller;
+using PartyGames.Features.HigherLower;
 using PartyGames.Features.TicTacToe;
 
 
@@ -67,6 +68,10 @@ namespace PartyGames.Services
 
                         case "tictactoe":
                             targetPage = new TicTacToePage(_serviceProvider.GetRequiredService<TicTacToeViewModel>());
+                            break;
+
+                        case "higherlower":
+                            targetPage = new HigherLowerPage(_serviceProvider.GetRequiredService<HigherLowerViewModel>());
                             break;
                             
                         default:

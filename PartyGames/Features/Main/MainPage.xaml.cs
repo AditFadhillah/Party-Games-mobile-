@@ -83,4 +83,9 @@ public partial class MainPage : ContentPage
 		Log("[MainPage] OnTicTacToeClicked called");
 		_viewModel.SelectGameCommand.Execute(new Game { GameType = "tictactoe", Name = "Tic-Tac-Toe" });
 	}
+
+	private void OnHigherLowerClicked(object? sender, EventArgs e)
+	{
+		_viewModel.SelectGameCommand.Execute(new Game { GameType = "higherlower", Name = "Higher or Lower" });
+	}
 }
