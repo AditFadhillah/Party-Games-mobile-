@@ -30,24 +30,29 @@ flowchart TD
 
 - MVVM. Each game has a ViewModel in `Features/<Game>/` and a XAML page with code-behind. ViewModels derive from `BaseViewModel`, which implements `INotifyPropertyChanged` and provides `SetProperty`, `IsBusy` and `Title`.
 - Pages bind to ViewModels and send input through commands. ViewModels reach back into the view for animations through `Func` delegates set by the page code-behind, such as `DrawAnimationAsync` in Higher or Lower and `ShakeHandAsync` in Blackjack. Game rules do not reference UI types.
-- Dependency injection is configured in `MauiProgram.cs`. `IGameService` and `INavigationService` are singletons. `DiceGameViewModel` and `CoinFlipViewModel` are singletons, so their history survives leaving the page. `BlackjackViewModel`, `TicTacToeViewModel` and `HigherLowerViewModel` are transient, so each visit starts fresh.
+- Dependency injection (DI) uses the built-in container set up in `MauiProgram.cs`. Classes declare what they need in their constructor, and the container supplies it, so no class creates its own services. A singleton registration is one shared instance for the whole app. A transient registration creates a new instance on each request.
+- `IGameService`, `INavigationService` and `MainViewModel` are singletons. `DiceGameViewModel` and `CoinFlipViewModel` are also singletons, so their history survives leaving the page. `BlackjackViewModel`, `TicTacToeViewModel` and `HigherLowerViewModel` are transient, so each visit starts fresh.
+- Pages are not registered in the container. `NavigationService` creates each page with `new` and passes in the ViewModel the container resolved.
 - `NavigationService` maps a game key (for example `"tictactoe"`) to its page. It resolves the ViewModel from the service provider, creates the page with that ViewModel, and pushes it onto the navigation stack. It also writes diagnostic lines to `partygames_debug.log` in the app data directory.
 - `GameService` provides the shared randomness (`RollDice`, `FlipCoin`) and the game catalog for the main menu (`GetAllGames`).
 
 ### Navigation
 
+This example follows Coin Flip. Every game uses the same path, and only the game key, ViewModel and page differ.
+
 ```mermaid
+%%{init: {'sequence': {'mirrorActors': false}}}%%
 sequenceDiagram
     participant U as User
     participant M as MainViewModel
     participant N as NavigationService
     participant D as DI container
-    participant P as Game page
-    U->>M: Tap game
-    M->>N: NavigateToGameAsync(gameType)
-    N->>D: GetRequiredService ViewModel
-    D-->>N: ViewModel instance
-    N->>P: Create page(ViewModel)
+    participant P as CoinFlipPage
+    U->>M: Tap Coin Flip
+    M->>N: NavigateToGameAsync("coinflip")
+    N->>D: GetRequiredService CoinFlipViewModel
+    D-->>N: Singleton CoinFlipViewModel
+    N->>P: new CoinFlipPage(viewModel)
     N->>N: PushAsync(page)
 ```
 
