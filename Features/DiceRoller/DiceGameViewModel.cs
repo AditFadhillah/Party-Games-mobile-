@@ -11,7 +11,6 @@ namespace PartyGames.Features.DiceRoller
     public class DiceGameViewModel : BaseViewModel
     {
         private readonly IGameService _gameService;
-        private readonly IScoreService _scoreService;
         private const int MinDice = 1;
         private const int MaxDice = 8;
         private static readonly int[] SupportedDieSides = { 4, 6, 8, 10, 12, 20 };
@@ -51,10 +50,9 @@ namespace PartyGames.Features.DiceRoller
         public ICommand IncreaseDiceCommand { get; }
         public ICommand DecreaseDiceCommand { get; }
 
-        public DiceGameViewModel(IGameService gameService, IScoreService scoreService)
+        public DiceGameViewModel(IGameService gameService)
         {
             _gameService = gameService;
-            _scoreService = scoreService;
 
             Title = "Dice Roller";
             RollHistory = new ObservableCollection<int>();

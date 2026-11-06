@@ -19,7 +19,7 @@
                 "focus": false
             },
             "options": {
-                "cwd": "${workspaceFolder}/PartyGames"
+                "cwd": "${workspaceFolder}"
             }
         }
     ]

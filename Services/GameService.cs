@@ -20,7 +20,6 @@ namespace PartyGames.Services
     public class GameService : IGameService
     {
         private readonly Random _random = new Random();
-        private List<GameScore> _sessionScores = new();
 
         public GameService()
         {

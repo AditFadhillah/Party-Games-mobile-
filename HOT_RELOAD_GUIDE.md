@@ -4,26 +4,21 @@
 
 ### Project Structure Created
 ```
-PartyGames/
-├── Views/
-│   ├── MainPage.xaml/.cs         # Game selection screen
-│   ├── DiceGamePage.xaml/.cs     # Dice game
-│   ├── CoinFlipPage.xaml/.cs     # Coin flip game
-│   └── BlackjackPage.xaml/.cs    # Coming soon placeholder
+./
+├── Features/
+│   ├── Main/MainPage.xaml/.cs            # Game selection screen
+│   ├── DiceRoller/DiceGamePage.xaml/.cs  # Dice game
+│   ├── CoinFlip/CoinFlipPage.xaml/.cs    # Coin flip game
+│   └── Blackjack/BlackjackPage.xaml/.cs  # Coming soon placeholder
 ├── ViewModels/
 │   ├── BaseViewModel.cs          # Base class with INotifyPropertyChanged
 │   ├── MainViewModel.cs          # Game selection logic
 │   ├── DiceGameViewModel.cs      # Dice game logic
 │   └── CoinFlipViewModel.cs      # Coin flip game logic
-├── Models/
-│   ├── Player.cs                 # Player entity
-│   ├── GameScore.cs              # Score entity
-│   ├── Game.cs                   # Game metadata
-│   └── GameResult.cs             # Game result entity
 ├── Services/
 │   ├── GameService.cs            # Game logic and operations
-│   ├── ScoreService.cs           # Score persistence
 │   └── NavigationService.cs      # App navigation
+├── Platforms/                    # Per-platform entry points and manifests
 ├── Resources/
 │   ├── Styles/                   # XAML styling
 │   ├── Images/                   # Game assets
@@ -60,7 +55,7 @@ MAUI Hot Reload Preview lets you see UI changes instantly without rebuilding the
 #### Step 1: Open the Project
 1. Open Visual Studio 2022
 2. File → Open → Folder
-3. Navigate to `c:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames`
+3. Navigate to `c:\Users\fadhi\PROJECTS\Party-Games-mobile`
 4. Wait for the solution to load and NuGet packages to restore
 
 #### Step 2: Configure Debug Target
@@ -83,7 +78,7 @@ MAUI Hot Reload Preview lets you see UI changes instantly without rebuilding the
 ### Method 2: Command Line Hot Reload
 
 ```bash
-cd c:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames
+cd c:\Users\fadhi\PROJECTS\Party-Games-mobile
 
 # For Android Emulator
 dotnet maui run -f net10.0-android --verbose
@@ -166,7 +161,7 @@ dotnet maui run -f net10.0-android --no-build
 ### Issue: "Workloads not installed" Error
 **Solution:**
 ```bash
-cd c:\Users\fadhi\PROJECTS\Party-Games-mobile\PartyGames
+cd c:\Users\fadhi\PROJECTS\Party-Games-mobile
 dotnet workload restore
 # Or specific workload:
 dotnet workload install maui-android

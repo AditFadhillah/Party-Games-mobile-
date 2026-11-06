@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET MAUI (Windows)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-windows",
+            "program": "${workspaceFolder}/bin/Debug/net10.0-windows10.0.19041.0/win-x64/PartyGames.exe",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": ".NET MAUI (Android - Pixel_10)",
+            "type": "maui",
+            "request": "launch",
+            "targetFramework": "net10.0-android",
+            "device": "emulator-5554"
+        }
+    ]
+}

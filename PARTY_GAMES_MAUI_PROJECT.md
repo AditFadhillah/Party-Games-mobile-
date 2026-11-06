@@ -40,57 +40,17 @@ A cross-platform mobile app (Android/iOS) that brings party games to life. Playe
 ## 📂 Project Structure
 
 ```
-PartyGames/
-├── PartyGames.App/                # MAUI App (UI + Navigation)
-│   ├── Views/
-│   │   ├── MainPage.xaml          # Game selection screen
-│   │   ├── DiceGamePage.xaml      # Dice game
-│   │   ├── BlackjackPage.xaml     # Blackjack
-│   │   ├── CoinFlipPage.xaml      # Coin flip
-│   │   ├── ScoresPage.xaml        # High scores
-│   │   └── SettingsPage.xaml      # Settings
-│   ├── ViewModels/
-│   │   ├── MainViewModel.cs
-│   │   ├── DiceGameViewModel.cs
-│   │   ├── BlackjackViewModel.cs
-│   │   ├── CoinFlipViewModel.cs
-│   │   └── ScoresViewModel.cs
-│   ├── Models/
-│   │   ├── Game.cs
-│   │   ├── GameScore.cs
-│   │   └── Player.cs
-│   ├── Services/
-│   │   ├── GameService.cs         # Game logic
-│   │   ├── ScoreService.cs        # Score persistence
-│   │   └── NavigationService.cs
-│   ├── Resources/
-│   │   ├── Styles/
-│   │   │   └── Colors.xaml
-│   │   ├── Images/
-│   │   │   ├── dice-icon.png
-│   │   │   ├── blackjack-icon.png
-│   │   │   └── coin-icon.png
-│   │   └── Fonts/
-│   ├── App.xaml                   # App shell & resources
-│   ├── AppShell.xaml              # Navigation structure
-│   ├── MauiProgram.cs             # Dependency injection setup
-│   └── Platforms/                 # Platform-specific code (Android/iOS)
-│
-├── PartyGames.Core/               # Shared game logic
-│   ├── Games/
-│   │   ├── DiceGame.cs
-│   │   ├── BlackjackGame.cs
-│   │   ├── CoinFlipGame.cs
-│   │   └── IGame.cs               # Interface
-│   └── Models/
-│       ├── GameResult.cs
-│       └── Player.cs
-│
-├── PartyGames.Tests/              # Unit tests
-│   ├── DiceGameTests.cs
-│   ├── BlackjackGameTests.cs
-│   └── ScoreServiceTests.cs
-│
+Party-Games-mobile/
+├── Features/                      # One folder per game (Main, DiceRoller, CoinFlip, TicTacToe, HigherLower, Blackjack)
+├── ViewModels/                    # Shared base view model
+├── Services/                      # Game and navigation services
+├── Models/                        # Game model
+├── Converters/                    # XAML value converters
+├── Platforms/                     # Platform-specific code (Android, iOS, MacCatalyst, Windows)
+├── Resources/                     # Styles, fonts, images, icons
+├── App.xaml / AppShell.xaml       # App shell & resources
+├── MauiProgram.cs                 # App setup
+├── PartyGames.csproj              # Project file
 └── README.md
 ```
 

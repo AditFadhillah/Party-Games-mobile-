@@ -25,7 +25,6 @@ public static class MauiProgram
 
 		// Register Services
 		builder.Services.AddSingleton<IGameService, GameService>();
-		builder.Services.AddSingleton<IScoreService, ScoreService>();
 		builder.Services.AddSingleton(serviceProvider => new NavigationService(serviceProvider));
 		builder.Services.AddSingleton<INavigationService>(serviceProvider => 
 			serviceProvider.GetRequiredService<NavigationService>());

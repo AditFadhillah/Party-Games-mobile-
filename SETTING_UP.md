@@ -31,8 +31,8 @@ dotnet workload restore
 Run these from the repo root:
 
 ```powershell
-dotnet build PartyGames\PartyGames.csproj -f net10.0-windows10.0.19041.0 -c Debug
-.\PartyGames\bin\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.exe
+dotnet build PartyGames.csproj -f net10.0-windows10.0.19041.0 -c Debug
+.\bin\Debug\net10.0-windows10.0.19041.0\win-x64\PartyGames.exe
 ```
 
 ### Run from VS Code (F5)
@@ -71,7 +71,7 @@ It should list `emulator-5554   device`.
 ### Build and run from a terminal
 
 ```powershell
-dotnet build -t:Run PartyGames\PartyGames.csproj -f net10.0-android -c Debug -p:JavaSdkDirectory="C:\Program Files\Microsoft\jdk-21.0.13.0.2-hotspot"
+dotnet build -t:Run PartyGames.csproj -f net10.0-android -c Debug -p:JavaSdkDirectory="C:\Program Files\Microsoft\jdk-21.0.13.0.2-hotspot"
 ```
 
 Change `JavaSdkDirectory` to your JDK 21 install path.
@@ -102,7 +102,7 @@ Android Studio does not build .NET MAUI projects. Use it only for the Android SD
 **Clean rebuild.**
 
 ```powershell
-dotnet clean PartyGames\PartyGames.csproj
+dotnet clean PartyGames.csproj
 ```
 
 ---
@@ -110,14 +110,15 @@ dotnet clean PartyGames\PartyGames.csproj
 ## Project Structure
 
 ```
-PartyGames/
-  Features/
-    Main/          Game selection screen
-    DiceRoller/    Dice roller (d4 to d20, up to 8 dice, history of 30 rolls)
-    CoinFlip/      Coin flip
-    Blackjack/     Placeholder
-  ViewModels/      Shared base view model
-  Services/        Game, score and navigation services
-  AppShell.xaml    Navigation shell and routes
-  MauiProgram.cs   Dependency injection and startup
+Features/
+  Main/          Game selection screen
+  DiceRoller/    Dice roller (d4 to d20, up to 8 dice, history of 30 rolls)
+  CoinFlip/      Coin flip
+  Blackjack/     Placeholder
+ViewModels/      Shared base view model
+Services/        Game and navigation services
+Platforms/       Per-platform entry points and manifests
+Resources/       Styles, fonts, images and app icons
+AppShell.xaml    Navigation shell and routes
+MauiProgram.cs   Dependency injection and startup
 ```

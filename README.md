@@ -28,14 +28,16 @@ dotnet build -t:Run -f net10.0-android -c Debug -p:JavaSdkDirectory="<path-to-jd
 Windows:
 
 ```
-dotnet build PartyGames\PartyGames.csproj -f net10.0-windows10.0.19041.0 -c Debug
+dotnet build PartyGames.csproj -f net10.0-windows10.0.19041.0 -c Debug
 ```
 
 ## Project Structure
 
 ```
-PartyGames/
+/
   Features/      Each game in its own folder (Main, DiceRoller, CoinFlip, TicTacToe, HigherLower, Blackjack)
   ViewModels/    Shared base view model
-  Services/      Game, score and navigation services
+  Services/      Game and navigation services
+  Models/        Game model
+  Platforms/     Platform-specific code
 ```
