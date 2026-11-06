@@ -11,13 +11,13 @@
 - [x] Optional: CPU opponent using minimax
 
 ## Higher or Lower
-- [ ] Create `HigherLower` folder with ViewModel and Page
-- [ ] Reuse `Card` and the card template to show the current card
-- [ ] Add Higher and Lower buttons; reveal the next card after each guess
-- [ ] Handle ties (define a rule, e.g. tie counts as a loss)
-- [ ] Track streak and best streak, with a game-over state on the first wrong guess
-- [ ] Add a shuffled deck with reshuffle when empty
-- [ ] Register in `MauiProgram.cs` and add a menu entry
+- [x] Create `HigherLower` folder with ViewModel and Page
+- [x] Reuse `Card` and the card template to show the current card
+- [x] Add Higher and Lower buttons; reveal the next card after each guess
+- [x] Handle ties (a tie counts as a wrong guess)
+- [x] Two-player scoring: a wrong guess awards the point to the other player
+- [x] Use one shuffled 52-card deck; the game ends when the deck is empty
+- [x] Register in `MauiProgram.cs` and add a menu entry
 
 ## Memory Match with Timer
 - [ ] Create `MemoryMatch` folder with ViewModel and Page

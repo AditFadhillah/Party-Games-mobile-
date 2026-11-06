@@ -91,6 +91,7 @@
                 CornerRadius="10"
                 BackgroundColor="#FF9500"
                 TextColor="#333333"
+                FontAttributes="Bold"
                 Command="{Binding StartTwoPlayerCommand}" />
         </VerticalStackLayout>
 
