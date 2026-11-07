@@ -98,6 +98,10 @@ sequenceDiagram
 - A tie or two Aces costs the guesser 1 sip.
 - Straight: a correct Straight gives 2 sips. A wrong Straight costs the difference. With one Ace, the Ace value closer to the other card is used.
 - `BeginCommand`, `HigherCommand`, `StraightCommand`, `LowerCommand` and `PlayAgainCommand` are enabled through `CanBegin`, `CanGuess` and `IsGameOver`. Input is blocked while an animation runs.
+- Messages use a `>>` prompt format, for example `>> Player 1 = // CORRECT //`, `>> Player 2 = TAKE 7 SIPS` and `>> Player 2 = HIGHER OR LOWER?`. The start prompt and the game-over line also start with `>>`.
+- The sip count in each message is shown in bold orange. Messages are left-aligned in a fixed-height status area at the top of the screen.
+- The Plus screen uses a monospace font for the title, scores, status text and buttons. Base Higher or Lower keeps the default font and centered status text.
+- The Plus buttons use the dark green title background with yellow borders and text. The Plus overrides are `FontFamilyName`, `StatusAlignment`, the button fill, border and text colors, and `PlayAgainBorder`. The base ViewModel returns the original values, so the shared page does not need variant-specific code.
 
 ### Blackjack
 
