@@ -37,6 +37,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<BlackjackViewModel>();
 		builder.Services.AddTransient<TicTacToeViewModel>();
 		builder.Services.AddTransient<HigherLowerViewModel>();
+		builder.Services.AddTransient<HigherLowerPlusViewModel>();
 
 		// Note: Don't register Views here - they're created dynamically by NavigationService
 		// Only register MainPage which is created in App.xaml.cs

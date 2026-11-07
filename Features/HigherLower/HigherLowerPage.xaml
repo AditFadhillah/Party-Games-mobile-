@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PartyGames.Features.HigherLower.HigherLowerPage"
-             Title="Higher or Lower">
+             Title="{Binding Title}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -57,7 +57,8 @@
             Padding="12,8">
             <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
                 <Label
-                    Text="HIGHER OR LOWER"
+                    Text="{Binding HeaderText}"
+                    FontFamily="{Binding FontFamilyName}"
                     FontSize="18"
                     FontAttributes="Bold"
                     TextColor="White"
@@ -65,6 +66,7 @@
                 <Label
                     Grid.Column="1"
                     Text="{Binding ScoreOne, StringFormat='P1: {0}'}"
+                    FontFamily="{Binding FontFamilyName}"
                     FontSize="16"
                     FontAttributes="Bold"
                     TextColor="#FFD700"
@@ -72,6 +74,7 @@
                 <Label
                     Grid.Column="2"
                     Text="{Binding ScoreTwo, StringFormat='P2: {0}'}"
+                    FontFamily="{Binding FontFamilyName}"
                     FontSize="16"
                     FontAttributes="Bold"
                     TextColor="#FFD700"
@@ -90,11 +93,12 @@
             <Label
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
-                Text="{Binding StatusMessage}"
+                FormattedText="{Binding StatusText}"
+                FontFamily="{Binding FontFamilyName}"
                 FontSize="16"
                 TextColor="#FFD700"
-                VerticalTextAlignment="Center"
-                HorizontalTextAlignment="Center" />
+                VerticalTextAlignment="{Binding StatusAlignment}"
+                HorizontalTextAlignment="{Binding StatusAlignment}" />
 
             <!-- Discard: declared first so the showcase card flies over it -->
             <Grid
@@ -198,35 +202,57 @@
         <VerticalStackLayout Grid.Row="2" Spacing="10" HeightRequest="130">
 
             <Grid
-                ColumnDefinitions="*,*"
+                ColumnDefinitions="*,*,*"
                 ColumnSpacing="10"
                 IsVisible="{Binding IsPlaying}">
                 <Button
                     Text="Higher"
+                    FontFamily="{Binding FontFamilyName}"
                     HeightRequest="72"
-                    FontSize="20"
+                    FontSize="18"
                     FontAttributes="Bold"
                     CornerRadius="10"
-                    BackgroundColor="#E8E8E8"
-                    TextColor="#333333"
+                    BackgroundColor="{Binding HigherFill}"
+                    BorderColor="{Binding ButtonBorder}"
+                    BorderWidth="2"
+                    TextColor="{Binding ButtonText}"
                     Command="{Binding HigherCommand}" />
                 <Button
                     Grid.Column="1"
-                    Text="Lower"
+                    Text="Straight"
+                    FontFamily="{Binding FontFamilyName}"
                     HeightRequest="72"
-                    FontSize="20"
+                    FontSize="18"
                     FontAttributes="Bold"
                     CornerRadius="10"
-                    BackgroundColor="#E8E8E8"
-                    TextColor="#333333"
+                    BackgroundColor="{Binding StraightFill}"
+                    BorderColor="{Binding ButtonBorder}"
+                    BorderWidth="2"
+                    TextColor="{Binding ButtonText}"
+                    Command="{Binding StraightCommand}" />
+                <Button
+                    Grid.Column="2"
+                    Text="Lower"
+                    FontFamily="{Binding FontFamilyName}"
+                    HeightRequest="72"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    BackgroundColor="{Binding LowerFill}"
+                    BorderColor="{Binding ButtonBorder}"
+                    BorderWidth="2"
+                    TextColor="{Binding ButtonText}"
                     Command="{Binding LowerCommand}" />
             </Grid>
 
             <Button
                 Text="Play Again"
+                FontFamily="{Binding FontFamilyName}"
                 CornerRadius="10"
-                BackgroundColor="#FFD700"
-                TextColor="#333333"
+                BackgroundColor="{Binding PlayAgainFill}"
+                BorderColor="{Binding PlayAgainBorder}"
+                BorderWidth="{Binding PlayAgainBorderWidth}"
+                TextColor="{Binding ButtonText}"
                 IsVisible="{Binding IsGameOver}"
                 Command="{Binding PlayAgainCommand}" />
         </VerticalStackLayout>

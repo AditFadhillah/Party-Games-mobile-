@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Graphics;
 using PartyGames.Features.Blackjack;
 using PartyGames.ViewModels;
 
@@ -10,7 +11,16 @@ namespace PartyGames.Features.HigherLower
     public class HigherLowerViewModel : BaseViewModel
     {
         private const int ResolveDelayMs = 600;
-        private const string PromptBegin = "Tap the stack to start";
+
+        protected static readonly string MonoFont = DeviceInfo.Platform == DevicePlatform.Android
+            ? "monospace"
+            : DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst
+                ? "Menlo"
+                : "Consolas";
+
+        protected enum GuessKind { Higher, Lower, Straight }
+
+        protected readonly record struct GuessOutcome(bool Correct, string Message, int Scorer, int Points, string? Emphasis = null);
 
         private readonly Random _random = new();
         private readonly List<Card> _deck = new();
@@ -23,7 +33,7 @@ namespace PartyGames.Features.HigherLower
         private bool _isGameOver;
         private double _stackOpacity = 1;
         private double _showcaseOpacity;
-        private string _statusMessage = PromptBegin;
+        private FormattedString _statusText = new();
         private Card _showcaseCard = new(1, CardSuit.Spades) { IsFaceDown = true };
 
         public HigherLowerViewModel()
@@ -31,12 +41,39 @@ namespace PartyGames.Features.HigherLower
             Title = "Higher or Lower";
 
             BeginCommand = new Command(async () => await BeginAsync(), () => CanBegin);
-            HigherCommand = new Command(async () => await GuessAsync(higher: true), () => CanGuess);
-            LowerCommand = new Command(async () => await GuessAsync(higher: false), () => CanGuess);
+            HigherCommand = new Command(async () => await GuessAsync(GuessKind.Higher), () => CanGuess);
+            LowerCommand = new Command(async () => await GuessAsync(GuessKind.Lower), () => CanGuess);
+            StraightCommand = new Command(async () => await GuessAsync(GuessKind.Straight), () => CanGuess);
             PlayAgainCommand = new Command(Reset, () => IsGameOver);
 
             Reset();
         }
+
+        public virtual string HeaderText => "HIGHER OR LOWER";
+
+        public virtual string FontFamilyName => string.Empty;
+
+        public virtual Microsoft.Maui.TextAlignment StatusAlignment => Microsoft.Maui.TextAlignment.Center;
+
+        protected virtual string StartPrompt => "Tap the stack to start";
+
+        protected virtual string GameOverLine => "Game Over";
+
+        public virtual Color HigherFill => Color.FromArgb("#FF6698E8");
+
+        public virtual Color StraightFill => Color.FromArgb("#FFFFE44C");
+
+        public virtual Color LowerFill => Color.FromArgb("#FFFF5263");
+
+        public virtual Color PlayAgainFill => Color.FromArgb("#FFD700");
+
+        public virtual Color ButtonBorder => Color.FromArgb("#FFA500");
+
+        public virtual Color ButtonText => Color.FromArgb("#333333");
+
+        public virtual Color PlayAgainBorder => Colors.Transparent;
+
+        public virtual double PlayAgainBorderWidth => 0;
 
         public ObservableCollection<Card> Discard { get; } = new();
 
@@ -53,6 +90,7 @@ namespace PartyGames.Features.HigherLower
         public Command BeginCommand { get; }
         public Command HigherCommand { get; }
         public Command LowerCommand { get; }
+        public Command StraightCommand { get; }
         public Command PlayAgainCommand { get; }
 
         public int CurrentPlayer
@@ -121,10 +159,10 @@ namespace PartyGames.Features.HigherLower
             private set => SetProperty(ref _stackOpacity, value);
         }
 
-        public string StatusMessage
+        public FormattedString StatusText
         {
-            get => _statusMessage;
-            private set => SetProperty(ref _statusMessage, value);
+            get => _statusText;
+            private set => SetProperty(ref _statusText, value);
         }
 
         public bool CanBegin => !IsPlaying && !IsAnimating && !IsGameOver;
@@ -140,7 +178,7 @@ namespace PartyGames.Features.HigherLower
             try
             {
                 await DrawNextAsync();
-                StatusMessage = $"Player {CurrentPlayer}, Higher or Lower?";
+                StatusText = BuildStatus(PromptLine(CurrentPlayer));
                 IsPlaying = true;
             }
             finally
@@ -149,7 +187,7 @@ namespace PartyGames.Features.HigherLower
             }
         }
 
-        private async Task GuessAsync(bool higher)
+        private async Task GuessAsync(GuessKind guess)
         {
             if (!CanGuess)
                 return;
@@ -161,26 +199,22 @@ namespace PartyGames.Features.HigherLower
                 await MoveToDiscardAsync(previous);
 
                 var next = await DrawNextAsync();
-                bool correct = higher
-                    ? Strength(next) > Strength(previous)
-                    : Strength(next) < Strength(previous);
+                var outcome = Judge(guess, previous, next);
 
                 await Task.Delay(ResolveDelayMs);
 
-                AddPoint(correct ? CurrentPlayer : OtherPlayer);
+                AddPoints(outcome.Scorer, outcome.Points);
 
-                string result = correct
-                    ? $"Correct guess for Player {CurrentPlayer}!"
-                    : $"Wrong guess for Player {CurrentPlayer}!";
+                string result = outcome.Message;
 
                 if (_deck.Count == 0)
                 {
-                    EndGame($"{result}\n\n{GameResult()}");
+                    EndGame($"{result}\n\n{GameOverLine}", outcome.Emphasis);
                     return;
                 }
 
                 CurrentPlayer = CurrentPlayer == 1 ? 2 : 1;
-                StatusMessage = $"{result}\n\nPlayer {CurrentPlayer}, Higher or Lower?";
+                StatusText = BuildStatus($"{result}\n\n{PromptLine(CurrentPlayer)}", outcome.Emphasis);
             }
             finally
             {
@@ -188,23 +222,53 @@ namespace PartyGames.Features.HigherLower
             }
         }
 
-        private int OtherPlayer => CurrentPlayer == 1 ? 2 : 1;
+        protected int OtherPlayer => CurrentPlayer == 1 ? 2 : 1;
 
-        private void AddPoint(int player)
+        protected virtual string PromptLine(int player) => $"Player {player}, Higher or Lower?";
+
+        /// <summary>
+        /// Decides whether the guess was correct and builds the result text.
+        /// Called before the turn passes, so CurrentPlayer is the guesser.
+        /// </summary>
+        protected virtual GuessOutcome Judge(GuessKind guess, Card previous, Card next)
         {
-            if (player == 1)
-                ScoreOne++;
-            else
-                ScoreTwo++;
+            bool correct = guess switch
+            {
+                GuessKind.Higher => Strength(next) > Strength(previous),
+                GuessKind.Lower => Strength(next) < Strength(previous),
+                _ => Strength(next) == Strength(previous)
+            };
+
+            string result = correct
+                ? $"Correct guess for Player {CurrentPlayer}!"
+                : $"Wrong guess for Player {CurrentPlayer}!";
+
+            return new GuessOutcome(correct, result, correct ? CurrentPlayer : OtherPlayer, 1);
         }
 
-        private string GameResult()
+        private void AddPoints(int player, int points)
         {
-            if (ScoreOne == ScoreTwo)
-                return $"Draw, {ScoreOne}-{ScoreTwo}.";
+            if (player == 1)
+                ScoreOne += points;
+            else
+                ScoreTwo += points;
+        }
 
-            int winner = ScoreOne > ScoreTwo ? 1 : 2;
-            return $"Player {winner} wins, {Math.Max(ScoreOne, ScoreTwo)}-{Math.Min(ScoreOne, ScoreTwo)}.";
+        private FormattedString BuildStatus(string message, string? emphasis = null)
+        {
+            var text = new FormattedString();
+            int start = emphasis is null ? -1 : message.IndexOf(emphasis, StringComparison.Ordinal);
+
+            if (start < 0)
+            {
+                text.Spans.Add(new Span { Text = message, FontFamily = FontFamilyName });
+                return text;
+            }
+
+            text.Spans.Add(new Span { Text = message[..start], FontFamily = FontFamilyName });
+            text.Spans.Add(new Span { Text = emphasis, TextColor = Colors.Orange, FontAttributes = FontAttributes.Bold, FontFamily = FontFamilyName });
+            text.Spans.Add(new Span { Text = message[(start + emphasis!.Length)..], FontFamily = FontFamilyName });
+            return text;
         }
 
         private async Task MoveToDiscardAsync(Card card)
@@ -233,11 +297,11 @@ namespace PartyGames.Features.HigherLower
             return card;
         }
 
-        private void EndGame(string message)
+        private void EndGame(string message, string? emphasis = null)
         {
             IsPlaying = false;
             IsGameOver = true;
-            StatusMessage = message;
+            StatusText = BuildStatus(message, emphasis);
         }
 
         private void Reset()
@@ -251,7 +315,7 @@ namespace PartyGames.Features.HigherLower
             IsGameOver = false;
             ShowcaseOpacity = 0;
             ShowcaseCard = new Card(1, CardSuit.Spades) { IsFaceDown = true };
-            StatusMessage = PromptBegin;
+            StatusText = BuildStatus(StartPrompt);
             UpdateStack();
         }
 
@@ -280,13 +344,14 @@ namespace PartyGames.Features.HigherLower
         /// <summary>
         /// Ace is high: 14 beats King.
         /// </summary>
-        private static int Strength(Card card) => card.Rank == 1 ? 14 : card.Rank;
+        protected static int Strength(Card card) => card.Rank == 1 ? 14 : card.Rank;
 
         private void RaiseCommandStates()
         {
             BeginCommand.ChangeCanExecute();
             HigherCommand.ChangeCanExecute();
             LowerCommand.ChangeCanExecute();
+            StraightCommand.ChangeCanExecute();
             PlayAgainCommand.ChangeCanExecute();
         }
     }

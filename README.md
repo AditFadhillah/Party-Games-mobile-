@@ -8,6 +8,7 @@ A cross-platform party game app built with .NET MAUI for Android and Windows.
 - **Coin Flip:** Flip a coin.
 - **Tic-Tac-Toe:** Play against a friend or the CPU (Easy, Medium or Hard). Pick X or O for the CPU mode; X always goes first. Scores are tracked for X and O.
 - **Higher or Lower:** Two players share one shuffled 52-card deck (Ace high). Player 1 starts. Guess whether the next card is higher or lower than the card on the discard pile. A correct guess scores for the guessing player; a wrong guess scores for the other player. The game ends when the stack is empty.
+- **Higher or Lower +:** A drinking version of Higher or Lower. The card difference is the number of sips.
 - **Blackjack:** Play against the dealer with a 500 chip bankroll. Bets move in steps of 5.
 
 ## Implementation
@@ -84,11 +85,19 @@ sequenceDiagram
 ### Higher or Lower
 
 - `HigherLowerViewModel` builds a 52-card deck and shuffles it with Fisher-Yates. Cards are drawn from the end of the list.
-- Ace is 14 for comparison. Equal ranks count as wrong guesses for both Higher and Lower.
+- Ace is 14 for comparison. Equal ranks count as wrong guesses for Higher and Lower. Straight is a correct guess only when the next card has the same rank.
 - A guess moves the showcase card to the discard pile, draws the next card, and compares the two. A correct guess scores for the guessing player, otherwise the other player scores. The turn then passes.
 - The view sets `DrawAnimationAsync` and `DiscardAnimationAsync` delegates. The ViewModel awaits them, so game logic does not depend on the UI.
 - When the deck is empty, the game ends and shows the winner or a draw.
-- `BeginCommand`, `HigherCommand`, `LowerCommand` and `PlayAgainCommand` are enabled through `CanBegin`, `CanGuess` and `IsGameOver`. Input is blocked while an animation runs.
+
+#### Higher or Lower +
+
+- `HigherLowerPlusViewModel` inherits `HigherLowerViewModel` and overrides `Judge`, so the same page and deck logic are reused.
+- The card difference is the number of sips. A correct guess makes the other player drink. A wrong guess makes the guesser drink.
+- An Ace always counts against the guesser. For Higher, a showcase Ace is 14 and a drawn Ace is 1. For Lower, a showcase Ace is 1 and a drawn Ace is 14.
+- A tie or two Aces costs the guesser 1 sip.
+- Straight: a correct Straight gives 2 sips. A wrong Straight costs the difference. With one Ace, the Ace value closer to the other card is used.
+- `BeginCommand`, `HigherCommand`, `StraightCommand`, `LowerCommand` and `PlayAgainCommand` are enabled through `CanBegin`, `CanGuess` and `IsGameOver`. Input is blocked while an animation runs.
 
 ### Blackjack
 
