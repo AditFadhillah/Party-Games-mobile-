@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PartyGames.Models"
+             xmlns:features="clr-namespace:PartyGames.Features.Main"
              x:Class="PartyGames.Features.Main.MainPage"
              Title="Party Games">
 
@@ -31,62 +33,22 @@
         <StackLayout
             Spacing="15"
             VerticalOptions="Fill"
-            Padding="0,20,0,20">
-            
-            <Button
-                x:Name="DiceRollerButton"
-                Text="Dice Roller"
-                Clicked="OnDiceRollerClicked"
-                CornerRadius="15"
-                BackgroundColor="#FF9500"
-                TextColor="White"
-                FontSize="18"
-                FontAttributes="Bold"
-                Padding="20,20" />
-
-            <Button
-                x:Name="BlackjackButton"
-                Text="Blackjack"
-                Clicked="OnBlackjackClicked"
-                CornerRadius="15"
-                BackgroundColor="#FF9500"
-                TextColor="White"
-                FontSize="18"
-                FontAttributes="Bold"
-                Padding="20,20" />
-
-            <Button
-                x:Name="CoinFlipButton"
-                Text="Coin Flip"
-                Clicked="OnCoinFlipClicked"
-                CornerRadius="15"
-                BackgroundColor="#FF9500"
-                TextColor="White"
-                FontSize="16"
-                FontAttributes="Bold"
-                Padding="20,20" />
-
-            <Button
-                x:Name="TicTacToeButton"
-                Text="Tic-Tac-Toe"
-                Clicked="OnTicTacToeClicked"
-                CornerRadius="15"
-                BackgroundColor="#FF9500"
-                TextColor="White"
-                FontSize="16"
-                FontAttributes="Bold"
-                Padding="20,20" />
-
-            <Button
-                x:Name="HigherLowerButton"
-                Text="Higher or Lower"
-                Clicked="OnHigherLowerClicked"
-                CornerRadius="15"
-                BackgroundColor="#FF9500"
-                TextColor="White"
-                FontSize="16"
-                FontAttributes="Bold"
-                Padding="20,20" />
+            Padding="0,20,0,20"
+            BindableLayout.ItemsSource="{Binding Games}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="models:Game">
+                    <Button
+                        Text="{Binding Name}"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type features:MainViewModel}}, Path=SelectGameCommand}"
+                        CommandParameter="{Binding .}"
+                        CornerRadius="15"
+                        BackgroundColor="#FF9500"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Padding="20,20" />
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
         </StackLayout>
     </VerticalStackLayout>
 

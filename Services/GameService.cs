@@ -55,41 +55,37 @@ namespace PartyGames.Services
                 {
                     Id = 1,
                     Name = "Dice Roller",
-                    Description = "Roll the dice and beat your best score!",
-                    IconName = "dice_icon",
                     GameType = "dice"
                 },
                 new Game
                 {
                     Id = 2,
                     Name = "Blackjack",
-                    Description = "Classic card game vs dealer",
-                    IconName = "blackjack_icon",
                     GameType = "blackjack"
                 },
                 new Game
                 {
                     Id = 3,
                     Name = "Coin Flip",
-                    Description = "Call heads or tails - test your luck!",
-                    IconName = "coin_icon",
                     GameType = "coinflip"
                 },
                 new Game
                 {
                     Id = 4,
                     Name = "Tic-Tac-Toe",
-                    Description = "Beat the CPU or play a friend on one board",
-                    IconName = "tictactoe_icon",
                     GameType = "tictactoe"
                 },
                 new Game
                 {
                     Id = 5,
                     Name = "Higher or Lower",
-                    Description = "Guess if the next card is higher or lower",
-                    IconName = "higherlower_icon",
                     GameType = "higherlower"
+                },
+                new Game
+                {
+                    Id = 6,
+                    Name = "Higher or Lower +",
+                    GameType = "higherlowerplus"
                 }
             };
         }

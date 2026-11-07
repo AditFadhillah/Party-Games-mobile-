@@ -17,15 +17,8 @@ namespace PartyGames.Features.Main
         public ObservableCollection<Game> Games { get; }
         public ICommand SelectGameCommand { get; }
 
-        private static void Log(string message)
-        {
-            Console.WriteLine(message);
-            File.AppendAllText(Path.Combine(Microsoft.Maui.Storage.FileSystem.AppDataDirectory, "partygames_debug.log"), $"[{DateTime.Now:HH:mm:ss.fff}] {message}\n");
-        }
-
         public MainViewModel(IGameService gameService, INavigationService navigationService)
         {
-            Log("[MainViewModel.ctor] Constructor called");
             _gameService = gameService;
             _navigationService = navigationService;
 
@@ -34,7 +27,6 @@ namespace PartyGames.Features.Main
             SelectGameCommand = new Command<Game>(OnSelectGame);
 
             LoadGames();
-            Log("[MainViewModel.ctor] Constructor completed");
         }
 
         private void LoadGames()
@@ -46,34 +38,20 @@ namespace PartyGames.Features.Main
             }
         }
 
-        private async void OnSelectGame(Game game)
+        private async void OnSelectGame(Game? game)
         {
-            Log($"[MainViewModel] OnSelectGame called with GameType: {game?.GameType}");
-            
             if (game == null)
-            {
-                Log("[MainViewModel] Game object was null");
                 return;
-            }
 
             IsBusy = true;
 
             try
             {
-                Log($"[MainViewModel] Calling NavigateToGameAsync with type: {game.GameType}");
-                // Navigate to the appropriate game page based on game type
                 await _navigationService.NavigateToGameAsync(game.GameType);
-                Log($"[MainViewModel] Navigation completed successfully");
-            }
-            catch (Exception ex)
-            {
-                Log($"[MainViewModel] Navigation error: {ex.Message}");
-                Log($"[MainViewModel] Stack trace: {ex.StackTrace}");
             }
             finally
             {
                 IsBusy = false;
-                Log("[MainViewModel] OnSelectGame finally block completed");
             }
         }
     }
