@@ -100,11 +100,11 @@ flowchart LR
 
 ## Startup and Navigation Flow
 
-1. **`MauiProgram.cs`** registers services and ViewModels with dependency injection: `builder.Services.AddTransient<BlackjackViewModel>();`
-2. **`AppShell.xaml` / `AppShell.xaml.cs`** register the `blackjack` route: `Routing.RegisterRoute("blackjack", typeof(BlackjackPage));`
-3. **`NavigationService.cs`** creates the page and resolves its ViewModel from DI: `"blackjack" => new BlackjackPage(_serviceProvider.GetRequiredService<BlackjackViewModel>())`
-4. The page's constructor runs `InitializeComponent()` (from the `.xaml`), sets `BindingContext` to the ViewModel, and the screen appears.
-5. User taps trigger ViewModel commands. The ViewModel changes its properties. The bindings in the `.xaml` update the screen.
+1. **`MauiProgram.cs`** registers services and ViewModels with dependency injection, including `BlackjackViewModel`.
+2. **`App.CreateWindow()`** resolves `MainViewModel`, creates `MainPage`, and puts it in a `NavigationPage`. The app uses this navigation stack; `AppShell` is not part of the current startup flow.
+3. **`MainViewModel`** loads the games from `GameService`. When a game is selected, it calls `NavigationService.NavigateToGameAsync()`.
+4. **`NavigationService.cs`** resolves the game's ViewModel from DI, creates the page with it, and pushes the page onto the navigation stack. For Blackjack, this is `new BlackjackPage(_serviceProvider.GetRequiredService<BlackjackViewModel>())`.
+5. The page constructor runs `InitializeComponent()`, sets its `BindingContext`, and wires any UI-only callbacks. User input then invokes ViewModel commands, and property changes update the XAML bindings.
 
 ---
 
