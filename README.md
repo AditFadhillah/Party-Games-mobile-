@@ -9,7 +9,7 @@ A cross-platform party game app built with .NET MAUI for Android and Windows.
 - **Tic-Tac-Toe:** Play against a friend or the CPU (Easy, Medium or Hard). Pick X or O for the CPU mode; X always goes first. Scores are tracked for X and O.
 - **Higher or Lower:** Two players share one shuffled 52-card deck (Ace high). Player 1 starts. Guess whether the next card is higher or lower than the card on the discard pile. A correct guess scores for the guessing player; a wrong guess scores for the other player. The game ends when the stack is empty.
 - **Higher or Lower +:** A drinking version of Higher or Lower. The card difference is the number of sips.
-- **Blackjack:** Play against the dealer with a 500 chip bankroll. Bets move in steps of 5.
+- **Blackjack:** Play against the dealer with a 500 chip bankroll. Bets move in steps of 5. Hit, stand, double down and split are available, and a natural pays 3:2.
 
 ## Implementation
 
@@ -106,13 +106,26 @@ sequenceDiagram
 ### Blackjack
 
 - `BlackjackViewModel` is transient, so each visit starts with 500 chips. When the bankroll drops below the minimum bet (5), Reset restores it.
-- The bet starts at 5 and changes in steps of 5, capped at the current bankroll. Deal is only enabled between rounds.
-- Each deal builds and shuffles a fresh 52-card deck. The player gets two cards. The dealer gets one face-up card and one face-down hole card, and the dealer total stays hidden until the hole card is revealed.
-- Hit draws one card for the player. Going over 21 settles the round after 800 ms.
-- Stand reveals the hole card. The dealer draws while the total is below 17 (soft 17 stands), 400 ms per card, then the round settles after 800 ms.
-- Hand value counts aces as 11 unless that would bust. A two-card 21 is not paid differently from any other 21.
-- Settlement: a player bust is a dealer win. A dealer bust or a higher player total is a player win. A lower player total is a dealer win. A tie is a dealer advantage, which costs the player the bet.
-- The bankroll changes by plus or minus the bet. `Card` derives from `BaseViewModel` so flipping `IsFaceDown` updates the view, and the page shakes the hand row through `ShakeHandAsync`.
+- The bet starts at 5 and changes in steps of 5, capped at the current bankroll. Changing the bet is only allowed between rounds. Deal is enabled only when the bet is affordable.
+- Each deal builds and shuffles a fresh 52-card deck. The player gets two cards. The dealer gets one face-up card and one face-down hole card. The hole card stays hidden until the player stands or the round ends.
+- Hand value counts aces as 11 unless that would bust. Five or more cards that do not bust count as 21 (Charlie rule). A natural is only two cards totaling 21.
+- Actions:
+  - Hit draws one card. Busting or reaching five cards ends the hand.
+  - Stand ends the hand.
+  - Double down doubles the stake, draws exactly one card, and ends the hand. It requires two cards and enough unallocated money.
+  - Split turns a pair into two hands, each with a stake equal to the original bet, and draws one card into each. Ranks do not need to match: any two cards with the same base value can split, so J, Q, K and 10 all count as 10. Up to four hands are allowed, and each new hand can be split again. Split aces receive one card each and then stand.
+- Animations: each drawn card is shown for 400 ms. The dealer draws while below 17 (soft 17 stands). The round settles 800 ms after the last card.
+- When every player hand busts, the dealer does not play and the round settles immediately after 800 ms.
+- Settlement, per hand:
+  - A bust is a dealer win and loses the stake.
+  - A natural beats any non-natural 21, and it only counts on an unsplit opening hand. It pays 3:2 (integer division of the stake).
+  - A dealer natural beats any non-natural player hand.
+  - A natural against a dealer natural is a push.
+  - A dealer bust or a higher total wins 1:1.
+  - A tie on total is a push and returns the stake.
+  - A lower total loses the stake.
+- The bankroll changes by the net of all hands. A hand's stake is the amount at risk for that hand. The result popup appears in the controls area below the table, so the cards stay in place. The result message lists each hand when there is a split.
+- `Card` derives from `BaseViewModel` so flipping `IsFaceDown` updates the view, and the page shakes the hand row through `ShakeHandAsync`.
 
 ## Requirements
 

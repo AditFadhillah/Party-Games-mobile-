@@ -6,6 +6,18 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <Style x:Key="RoundButtonStyle" TargetType="Button">
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="BackgroundColor" Value="#E8E8E8" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#333333" />
+                <Style.Triggers>
+                    <Trigger TargetType="Button" Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.4" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
             <DataTemplate x:Key="CardTemplate">
                 <Grid WidthRequest="56" HeightRequest="80">
                     <!-- Face down -->
@@ -103,38 +115,10 @@
             VerticalOptions="Center" />
 
         <!-- Table: dealer and player hands -->
+        <ScrollView Grid.Row="1">
         <VerticalStackLayout
-            Grid.Row="1"
             Spacing="14"
-            VerticalOptions="Start">
-
-            <!-- Result popup: fixed-height slot so the table does not shift -->
-            <Grid HeightRequest="150">
-                <Border
-                    IsVisible="{Binding IsResultVisible}"
-                    BackgroundColor="#FFD700"
-                    Stroke="#FF9500"
-                    StrokeThickness="2"
-                    StrokeShape="RoundRectangle 15"
-                    Padding="20,12"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center">
-                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label
-                            Text="{Binding ResultMessage}"
-                            FontSize="22"
-                            FontAttributes="Bold"
-                            TextColor="#333333"
-                            HorizontalTextAlignment="Center" />
-                        <Button
-                            Text="Continue"
-                            CornerRadius="10"
-                            BackgroundColor="#2D5016"
-                            TextColor="White"
-                            Command="{Binding DismissResultCommand}" />
-                    </VerticalStackLayout>
-                </Border>
-            </Grid>
+            VerticalOptions="Center">
 
             <Label
                 Text="{Binding DealerTotalText}"
@@ -156,23 +140,46 @@
                 TextColor="#FFD700"
                 HorizontalTextAlignment="Center" />
 
-            <HorizontalStackLayout
+            <!-- One block per player hand; a split round shows several -->
+            <VerticalStackLayout
                 x:Name="PlayerRow"
-                Spacing="6"
+                Spacing="10"
                 HorizontalOptions="Center"
-                BindableLayout.ItemsSource="{Binding PlayerHand}"
-                BindableLayout.ItemTemplate="{StaticResource CardTemplate}" />
+                BindableLayout.ItemsSource="{Binding Hands}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                            <Label
+                                Text="{Binding Summary}"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                TextColor="White"
+                                HorizontalTextAlignment="Center" />
+                            <HorizontalStackLayout
+                                Spacing="6"
+                                HorizontalOptions="Center"
+                                BindableLayout.ItemsSource="{Binding Cards}"
+                                BindableLayout.ItemTemplate="{StaticResource CardTemplate}" />
+                            <Label
+                                Text="{Binding BetText}"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                TextColor="White"
+                                HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
 
-            <Label
-                Text="{Binding PlayerTotalText}"
-                FontSize="16"
-                FontAttributes="Bold"
-                TextColor="White"
-                HorizontalTextAlignment="Center" />
         </VerticalStackLayout>
+        </ScrollView>
 
-        <!-- Controls -->
-        <VerticalStackLayout Grid.Row="2" Spacing="10">
+        <!-- Controls: one fixed-height cell, each state bottom-aligned so the table never shifts -->
+        <Grid Grid.Row="2" HeightRequest="170" VerticalOptions="End">
+        <VerticalStackLayout
+            Spacing="10"
+            VerticalOptions="End"
+            IsVisible="{Binding IsBetting}">
 
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                 <Button
@@ -190,12 +197,12 @@
                 <Label
                     Grid.Column="1"
                     Text="{Binding Bet, StringFormat='Bet: {0}'}"
-                    FontSize="16"
+                    FontSize="18"
                     FontAttributes="Bold"
                     TextColor="White"
-                    IsVisible="{Binding ShowBetLabel}"
                     HorizontalTextAlignment="Center"
-                    VerticalTextAlignment="Center" />
+                    VerticalOptions="Center"
+                    IsVisible="{Binding IsBetting}" />
                 <Button
                     Grid.Column="2"
                     Text="+"
@@ -218,24 +225,34 @@
                 TextColor="#333333"
                 IsVisible="{Binding IsBetting}"
                 Command="{Binding DealCommand}" />
+        </VerticalStackLayout>
 
             <Grid
-                ColumnDefinitions="*,*"
-                ColumnSpacing="10"
+                ColumnDefinitions="*,*,*,*"
+                ColumnSpacing="8"
+                VerticalOptions="End"
                 IsVisible="{Binding IsRoundActive}">
                 <Button
                     Text="Hit"
-                    CornerRadius="10"
-                    BackgroundColor="#E8E8E8"
-                    TextColor="#333333"
+                    Style="{StaticResource RoundButtonStyle}"
                     Command="{Binding HitCommand}" />
                 <Button
                     Grid.Column="1"
                     Text="Stand"
-                    CornerRadius="10"
-                    BackgroundColor="#E8E8E8"
-                    TextColor="#333333"
+                    Style="{StaticResource RoundButtonStyle}"
                     Command="{Binding StandCommand}" />
+                <Button
+                    Grid.Column="2"
+                    Text="Double"
+                    FontSize="14"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Command="{Binding DoubleDownCommand}" />
+                <Button
+                    Grid.Column="3"
+                    Text="Split"
+                    FontSize="14"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Command="{Binding SplitCommand}" />
             </Grid>
 
             <Button
@@ -244,9 +261,34 @@
                 CornerRadius="10"
                 BackgroundColor="#FFD700"
                 TextColor="#333333"
+                VerticalOptions="End"
                 Command="{Binding ResetCommand}" />
 
-        </VerticalStackLayout>
+            <Border
+                IsVisible="{Binding IsResultVisible}"
+                BackgroundColor="#FFD700"
+                Stroke="#FF9500"
+                StrokeThickness="2"
+                StrokeShape="RoundRectangle 15"
+                Padding="20,12"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label
+                        Text="{Binding ResultMessage}"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="#333333"
+                        HorizontalTextAlignment="Center" />
+                    <Button
+                        Text="Continue"
+                        CornerRadius="10"
+                        BackgroundColor="#2D5016"
+                        TextColor="White"
+                        Command="{Binding DismissResultCommand}" />
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 
 </ContentPage>

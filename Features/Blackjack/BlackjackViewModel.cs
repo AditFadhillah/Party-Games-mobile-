@@ -12,11 +12,14 @@ namespace PartyGames.Features.Blackjack
         private const int BetStep = 5;
         private const int BlackjackTarget = 21;
         private const int DealerStandValue = 17;
+        private const int MaxHands = 4;
+        private const int CharlieCardCount = 5;
         private const int DrawDelayMs = 400;
         private const int SettleDelayMs = 800;
         private const string ResultPlayerWin = "Player win";
         private const string ResultDealerWin = "Dealer win";
-        private const string ResultDealerAdvantage = "Dealer advantage";
+        private const string ResultPlayerBlackjack = "Blackjack!";
+        private const string ResultPush = "Push";
         private const string PromptBet = "Place your bet and deal.";
 
         private readonly Random _random = new();
@@ -29,7 +32,6 @@ namespace PartyGames.Features.Blackjack
         private bool _isResultVisible;
         private string _resultMessage = string.Empty;
         private string _statusMessage = PromptBet;
-        private string _playerTotalText = "Player: 0";
         private string _dealerTotalText = "Dealer: ?";
 
         public BlackjackViewModel()
@@ -38,16 +40,18 @@ namespace PartyGames.Features.Blackjack
 
             IncreaseBetCommand = new Command(() => ChangeBet(BetStep), () => CanChangeBet && Bet + BetStep <= Money);
             DecreaseBetCommand = new Command(() => ChangeBet(-BetStep), () => CanChangeBet && Bet > BetStep);
-            DealCommand = new Command(Deal, () => CanDeal);
+            DealCommand = new Command(async () => await DealAsync(), () => CanDeal);
             HitCommand = new Command(async () => await HitAsync(), () => CanHit);
             StandCommand = new Command(async () => await StandAsync(), () => CanStand);
+            DoubleDownCommand = new Command(async () => await DoubleDownAsync(), () => CanDoubleDown);
+            SplitCommand = new Command(async () => await SplitAsync(), () => CanSplit);
             ResetCommand = new Command(Reset, () => IsOutOfMoney);
             DismissResultCommand = new Command(DismissResult);
 
             ShowPlaceholderHands();
         }
 
-        public ObservableCollection<Card> PlayerHand { get; } = new();
+        public ObservableCollection<BlackjackHand> Hands { get; } = new();
 
         public ObservableCollection<Card> DealerHand { get; } = new();
 
@@ -63,6 +67,8 @@ namespace PartyGames.Features.Blackjack
         public Command DealCommand { get; }
         public Command HitCommand { get; }
         public Command StandCommand { get; }
+        public Command DoubleDownCommand { get; }
+        public Command SplitCommand { get; }
         public Command ResetCommand { get; }
         public Command DismissResultCommand { get; }
 
@@ -110,7 +116,6 @@ namespace PartyGames.Features.Blackjack
                 if (SetProperty(ref _isResultVisible, value))
                 {
                     OnPropertyChanged(nameof(IsBetting));
-                    OnPropertyChanged(nameof(ShowBetLabel));
                     RaiseCommandStates();
                 }
             }
@@ -131,8 +136,6 @@ namespace PartyGames.Features.Blackjack
 
         public bool IsBetting => !IsRoundActive && !IsAnimating && !IsResultVisible;
 
-        public bool ShowBetLabel => !IsResultVisible;
-
         public string ResultMessage
         {
             get => _resultMessage;
@@ -145,12 +148,6 @@ namespace PartyGames.Features.Blackjack
             private set => SetProperty(ref _statusMessage, value);
         }
 
-        public string PlayerTotalText
-        {
-            get => _playerTotalText;
-            private set => SetProperty(ref _playerTotalText, value);
-        }
-
         public string DealerTotalText
         {
             get => _dealerTotalText;
@@ -161,9 +158,29 @@ namespace PartyGames.Features.Blackjack
 
         public bool CanDeal => IsBetting && Money >= BetStep && Bet <= Money;
 
-        public bool CanHit => IsRoundActive && !IsAnimating;
+        /// <summary>
+        /// Money not yet committed to a hand in the current round.
+        /// </summary>
+        public int AvailableFunds => Money - Hands.Sum(h => h.Stake);
 
-        public bool CanStand => IsRoundActive && !IsAnimating;
+        public bool CanHit => IsRoundActive && !IsAnimating && Active is not null;
+
+        public bool CanStand => IsRoundActive && !IsAnimating && Active is not null;
+
+        public bool CanDoubleDown => IsRoundActive && !IsAnimating
+            && Active is { } hand && hand.Cards.Count == 2 && AvailableFunds >= hand.Stake;
+
+        public bool CanSplit => IsRoundActive && !IsAnimating
+            && Active is { IsSplitAce: false } hand
+            && hand.Cards.Count == 2
+            && hand.Cards[0].BaseValue == hand.Cards[1].BaseValue
+            && Hands.Count < MaxHands
+            && AvailableFunds >= hand.Stake;
+
+        /// <summary>
+        /// The hand the player is currently playing, or null when no hand is left to act on.
+        /// </summary>
+        private BlackjackHand? Active => Hands.FirstOrDefault(h => !h.IsDone);
 
         public bool IsOutOfMoney => Money < BetStep;
 
@@ -173,18 +190,20 @@ namespace PartyGames.Features.Blackjack
             Bet = Math.Clamp(Bet + delta, BetStep, max);
         }
 
-        private void Deal()
+        private async Task DealAsync()
         {
             if (!CanDeal)
                 return;
 
             BuildShuffledDeck();
-            PlayerHand.Clear();
+            Hands.Clear();
             DealerHand.Clear();
 
-            PlayerHand.Add(Draw());
+            var firstHand = new BlackjackHand { Stake = Bet };
+            firstHand.Cards.Add(Draw());
             DealerHand.Add(Draw());
-            PlayerHand.Add(Draw());
+            firstHand.Cards.Add(Draw());
+            Hands.Add(firstHand);
 
             var holeCard = Draw();
             holeCard.IsFaceDown = true;
@@ -192,8 +211,23 @@ namespace PartyGames.Features.Blackjack
 
             ResultMessage = string.Empty;
             IsRoundActive = true;
-            StatusMessage = "Hit or stand?";
             RefreshTotals();
+
+            if (IsNatural(firstHand.Cards))
+            {
+                IsAnimating = true;
+                try
+                {
+                    await FinishRoundAsync();
+                }
+                finally
+                {
+                    IsAnimating = false;
+                }
+                return;
+            }
+
+            StatusMessage = "Hit or stand?";
         }
 
         private async Task HitAsync()
@@ -204,22 +238,13 @@ namespace PartyGames.Features.Blackjack
             IsAnimating = true;
             try
             {
-                var card = Draw();
-                card.IsFaceDown = true;
-                PlayerHand.Add(card);
+                var hand = Active!;
+                await DrawToHandAsync(hand);
 
-                await Task.Delay(DrawDelayMs);
-                await ShakeAsync(dealer: false);
+                if (HandValue(hand.Cards) > BlackjackTarget || hand.Cards.Count >= CharlieCardCount)
+                    hand.IsDone = true;
 
-                card.IsFaceDown = false;
-                RefreshTotals();
-
-                if (HandValue(PlayerHand) > BlackjackTarget)
-                {
-                    IsRoundActive = false;
-                    await Task.Delay(SettleDelayMs);
-                    Settle();
-                }
+                await AdvanceRoundAsync();
             }
             finally
             {
@@ -235,12 +260,116 @@ namespace PartyGames.Features.Blackjack
             IsAnimating = true;
             try
             {
-                await FinishRoundAsync();
+                Active!.IsDone = true;
+                await AdvanceRoundAsync();
             }
             finally
             {
                 IsAnimating = false;
             }
+        }
+
+        private async Task DoubleDownAsync()
+        {
+            if (!CanDoubleDown)
+                return;
+
+            IsAnimating = true;
+            try
+            {
+                var hand = Active!;
+                hand.Stake *= 2;
+                await DrawToHandAsync(hand);
+
+                hand.IsDone = true;
+                await AdvanceRoundAsync();
+            }
+            finally
+            {
+                IsAnimating = false;
+            }
+        }
+
+        /// <summary>
+        /// Splits a pair into two hands. Each hand gets a new card and a stake equal to the original bet.
+        /// </summary>
+        private async Task SplitAsync()
+        {
+            if (!CanSplit)
+                return;
+
+            IsAnimating = true;
+            try
+            {
+                var hand = Active!;
+                bool splitAces = hand.Cards[0].Rank == 1;
+
+                var moved = hand.Cards[1];
+                hand.Cards.RemoveAt(1);
+
+                var newHand = new BlackjackHand { Stake = hand.Stake, IsSplitAce = splitAces };
+                newHand.Cards.Add(moved);
+                hand.IsSplitAce = splitAces;
+                Hands.Insert(Hands.IndexOf(hand) + 1, newHand);
+                RefreshTotals();
+
+                await DrawToHandAsync(hand);
+                await DrawToHandAsync(newHand);
+
+                // Split aces receive one card each and then stand.
+                if (splitAces)
+                {
+                    hand.IsDone = true;
+                    newHand.IsDone = true;
+                }
+
+                await AdvanceRoundAsync();
+            }
+            finally
+            {
+                IsAnimating = false;
+            }
+        }
+
+        /// <summary>
+        /// Deals one face-up card to a player hand with a short animation.
+        /// </summary>
+        private async Task DrawToHandAsync(BlackjackHand hand)
+        {
+            var card = Draw();
+            card.IsFaceDown = true;
+            hand.Cards.Add(card);
+
+            await Task.Delay(DrawDelayMs);
+            await ShakeAsync(dealer: false);
+
+            card.IsFaceDown = false;
+            RefreshTotals();
+        }
+
+        /// <summary>
+        /// Prompts for the next player hand, or ends the round once every hand is finished.
+        /// </summary>
+        private async Task AdvanceRoundAsync()
+        {
+            if (Active is { } next)
+            {
+                StatusMessage = Hands.Count == 1
+                    ? "Hit or stand?"
+                    : $"Hand {Hands.IndexOf(next) + 1}: hit, stand, double or split?";
+                return;
+            }
+
+            // Every hand busted, so the dealer does not need to play.
+            if (Hands.All(h => HandValue(h.Cards) > BlackjackTarget))
+            {
+                IsRoundActive = false;
+                await Task.Delay(SettleDelayMs);
+                Settle();
+                return;
+            }
+
+            await FinishRoundAsync();
         }
 
         /// <summary>
@@ -282,30 +411,84 @@ namespace PartyGames.Features.Blackjack
         {
             RefreshTotals();
 
-            int playerValue = HandValue(PlayerHand);
             int dealerValue = HandValue(DealerHand);
+            bool dealerNatural = IsNatural(DealerHand);
+            bool singleHand = Hands.Count == 1;
 
-            string result;
-            if (playerValue > BlackjackTarget)
-                result = ResultDealerWin;
-            else if (dealerValue > BlackjackTarget || playerValue > dealerValue)
-                result = ResultPlayerWin;
-            else if (dealerValue > playerValue)
-                result = ResultDealerWin;
-            else
-                result = ResultDealerAdvantage;
+            var results = new List<string>();
+            int net = 0;
+            bool blackjack = false;
 
-            int change = result == ResultPlayerWin ? Bet : -Bet;
-            Money += change;
-            _ = ShowMoneyChangeAsync?.Invoke(change);
-            StatusMessage = change > 0 ? $"You won {Bet}." : $"You lost {Bet}.";
+            foreach (var hand in Hands)
+            {
+                int playerValue = HandValue(hand.Cards);
+                // A natural only counts on an unsplit opening hand.
+                bool playerNatural = singleHand && IsNatural(hand.Cards);
+                string result;
+                int change;
+
+                if (playerValue > BlackjackTarget)
+                {
+                    result = ResultDealerWin;
+                    change = -hand.Stake;
+                }
+                else if (playerNatural && dealerNatural)
+                {
+                    result = ResultPush;
+                    change = 0;
+                }
+                else if (dealerNatural)
+                {
+                    result = ResultDealerWin;
+                    change = -hand.Stake;
+                }
+                else if (playerNatural)
+                {
+                    result = ResultPlayerBlackjack;
+                    change = hand.Stake * 3 / 2;
+                    blackjack = true;
+                }
+                else if (dealerValue > BlackjackTarget || playerValue > dealerValue)
+                {
+                    result = ResultPlayerWin;
+                    change = hand.Stake;
+                }
+                else if (playerValue == dealerValue)
+                {
+                    result = ResultPush;
+                    change = 0;
+                }
+                else
+                {
+                    result = ResultDealerWin;
+                    change = -hand.Stake;
+                }
+
+                results.Add(result);
+                net += change;
+            }
+
+            ResultMessage = string.Join("\n",
+                results.Select((r, i) => singleHand ? r : $"Hand {i + 1}: {r}"));
+
+            Money += net;
+            if (net != 0)
+                _ = ShowMoneyChangeAsync?.Invoke(net);
+
+            StatusMessage = net switch
+            {
+                0 => results.All(r => r == ResultPush)
+                    ? "Push. Your bet is returned."
+                    : "Even round. No money won or lost.",
+                < 0 => $"You lost {-net}.",
+                _ => blackjack ? $"Blackjack! You won {net}." : $"You won {net}.",
+            };
 
             if (IsOutOfMoney)
                 StatusMessage = "You are out of money. Press Reset to start again.";
 
             Bet = Math.Clamp(Bet, BetStep, Math.Max(BetStep, Money));
 
-            ResultMessage = result;
             IsResultVisible = true;
         }
 
@@ -333,24 +516,38 @@ namespace PartyGames.Features.Blackjack
         /// </summary>
         private void ShowPlaceholderHands()
         {
-            PlayerHand.Clear();
+            Hands.Clear();
             DealerHand.Clear();
 
+            // Zero stake marks this as a placeholder rather than a real hand.
+            var placeholder = new BlackjackHand();
             for (int i = 0; i < 2; i++)
             {
-                PlayerHand.Add(new Card(1, CardSuit.Spades) { IsFaceDown = true });
+                placeholder.Cards.Add(new Card(1, CardSuit.Spades) { IsFaceDown = true });
                 DealerHand.Add(new Card(1, CardSuit.Spades) { IsFaceDown = true });
             }
+            Hands.Add(placeholder);
 
             RefreshTotals();
         }
 
         private void RefreshTotals()
         {
-            PlayerTotalText = $"Player: {HandValue(PlayerHand)}";
+            foreach (var hand in Hands)
+            {
+                hand.Summary = hand.Stake == 0
+                    ? string.Empty
+                    : $"Total {HandValue(hand.Cards)}";
+                hand.BetText = hand.Stake == 0
+                    ? string.Empty
+                    : $"Bet {hand.Stake}";
+            }
+
             DealerTotalText = DealerHand.Any(c => c.IsFaceDown)
                 ? "Dealer: ?"
                 : $"Dealer: {HandValue(DealerHand)}";
+
+            RaiseCommandStates();
         }
 
         private void RaiseCommandStates()
@@ -360,11 +557,15 @@ namespace PartyGames.Features.Blackjack
             DealCommand.ChangeCanExecute();
             HitCommand.ChangeCanExecute();
             StandCommand.ChangeCanExecute();
+            DoubleDownCommand.ChangeCanExecute();
+            SplitCommand.ChangeCanExecute();
             ResetCommand.ChangeCanExecute();
             OnPropertyChanged(nameof(CanChangeBet));
             OnPropertyChanged(nameof(CanDeal));
             OnPropertyChanged(nameof(CanHit));
             OnPropertyChanged(nameof(CanStand));
+            OnPropertyChanged(nameof(CanDoubleDown));
+            OnPropertyChanged(nameof(CanSplit));
             OnPropertyChanged(nameof(IsBetting));
         }
 
@@ -392,19 +593,27 @@ namespace PartyGames.Features.Blackjack
             return card;
         }
 
+        private static bool IsNatural(IEnumerable<Card> cards)
+        {
+            var list = cards.ToList();
+            return list.Count == 2 && HandValue(list) == BlackjackTarget;
+        }
+
         /// <summary>
-        /// Best hand total: aces count as 11 unless that would bust.
+        /// Best hand total: aces count as 11 unless that would bust. Five or more non-busted cards count as 21.
         /// </summary>
         private static int HandValue(IEnumerable<Card> cards)
         {
             int total = 0;
             int aces = 0;
+            int visibleCards = 0;
 
             foreach (var card in cards)
             {
                 if (card.IsFaceDown)
                     continue;
 
+                visibleCards++;
                 total += card.BaseValue;
                 if (card.Rank == 1)
                     aces++;
@@ -415,6 +624,9 @@ namespace PartyGames.Features.Blackjack
                 total += 10;
                 aces--;
             }
+
+            if (visibleCards >= CharlieCardCount && total <= BlackjackTarget)
+                return BlackjackTarget;
 
             return total;
         }
