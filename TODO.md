@@ -42,7 +42,7 @@
 - [ ] Add a "New Word" button
 - [ ] Register in `MauiProgram.cs` and add a menu entry
 
-## Shared Steps (all four games)
+## Shared Steps (all games)
 - [ ] Add each game to the main menu
 - [ ] Build on Windows and launch on the Pixel_10 emulator to verify each screen
 - [ ] Commit and push per game, keeping only source files staged
