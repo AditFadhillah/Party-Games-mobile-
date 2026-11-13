@@ -6,3 +6,7 @@ obj/
 .vs/
 *.user
 *.suo
+
+## Release packages
+*.apk
+*.aab
