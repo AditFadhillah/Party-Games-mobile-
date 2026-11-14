@@ -71,8 +71,9 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ScrollView BackgroundColor="#2D5016">
     <Grid
-        RowDefinitions="Auto,*,Auto"
+        RowDefinitions="Auto,Auto,Auto"
         RowSpacing="16"
         Padding="16"
         BackgroundColor="#2D5016">
@@ -115,10 +116,9 @@
             VerticalOptions="Center" />
 
         <!-- Table: dealer and player hands -->
-        <ScrollView Grid.Row="1">
         <VerticalStackLayout
-            Spacing="14"
-            VerticalOptions="Center">
+            Grid.Row="1"
+            Spacing="14">
 
             <Label
                 Text="{Binding DealerTotalText}"
@@ -172,7 +172,6 @@
             </VerticalStackLayout>
 
         </VerticalStackLayout>
-        </ScrollView>
 
         <!-- Controls: one fixed-height cell, each state bottom-aligned so the table never shifts -->
         <Grid Grid.Row="2" HeightRequest="170" VerticalOptions="End">
@@ -290,6 +289,7 @@
             </Border>
         </Grid>
     </Grid>
+    </ScrollView>
 
 </ContentPage>
 

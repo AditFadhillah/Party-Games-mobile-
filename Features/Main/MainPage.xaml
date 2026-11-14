@@ -6,10 +6,10 @@
              x:Class="PartyGames.Features.Main.MainPage"
              Title="Party Games">
 
+    <ScrollView BackgroundColor="#2A2A2A">
     <VerticalStackLayout
         Padding="20"
         Spacing="15"
-        VerticalOptions="Fill"
         BackgroundColor="#2A2A2A">
         
         <!-- Title -->
@@ -51,6 +51,7 @@
             </BindableLayout.ItemTemplate>
         </StackLayout>
     </VerticalStackLayout>
+    </ScrollView>
 
 </ContentPage>
 
