@@ -4,6 +4,7 @@ using PartyGames.Features.Blackjack;
 using PartyGames.Features.CoinFlip;
 using PartyGames.Features.DiceRoller;
 using PartyGames.Features.HigherLower;
+using PartyGames.Features.MemoryMatch;
 using PartyGames.Features.Main;
 using PartyGames.Features.TicTacToe;
 
@@ -38,6 +39,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<TicTacToeViewModel>();
 		builder.Services.AddTransient<HigherLowerViewModel>();
 		builder.Services.AddTransient<HigherLowerPlusViewModel>();
+		builder.Services.AddTransient<MemoryMatchViewModel>();
 
 		// Note: Don't register Views here - they're created dynamically by NavigationService
 		// Only register MainPage which is created in App.xaml.cs

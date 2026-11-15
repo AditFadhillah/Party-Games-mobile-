@@ -20,16 +20,16 @@
 - [x] Register in `MauiProgram.cs` and add a menu entry
 
 ## Memory Match with Timer
-- [ ] Create `MemoryMatch` folder with ViewModel and Page
-- [ ] Build a card grid (for example 4x4) of face-down `Border` tiles
-- [ ] Flip two tiles per turn and compare; hide again on mismatch after a short delay
-- [ ] Shuffle pairs at the start of each game
-- [ ] Add a timer using `IDispatcherTimer`, started on the first flip and stopped on completion
-- [ ] Show elapsed time and a win popup with the final time
-- [ ] Add a best-time record saved with `Preferences`
-- [ ] Add a flip animation (`ScaleToAsync` or `RotateYTo`)
-- [ ] Ensure the timer stops and disposes when leaving the page
-- [ ] Register in `MauiProgram.cs` and add a menu entry
+- [x] Create `MemoryMatch` folder with ViewModel and Page
+- [x] Build a card grid (for example 4x4) of face-down `Border` tiles
+- [x] Flip two tiles per turn and compare; hide again on mismatch after a short delay
+- [x] Shuffle pairs at the start of each game
+- [x] Add a timer using `IDispatcherTimer`, started on the first flip and stopped on completion
+- [x] Show elapsed time and a win popup with the final time
+- [x] Add a best-time record saved with `Preferences`
+- [x] Add a flip animation (`ScaleToAsync` or `RotateYTo`)
+- [x] Ensure the timer stops and disposes when leaving the page
+- [x] Register in `MauiProgram.cs` and add a menu entry
 
 ## Hangman with Typeable Word
 - [ ] Create `Hangman` folder with ViewModel and Page

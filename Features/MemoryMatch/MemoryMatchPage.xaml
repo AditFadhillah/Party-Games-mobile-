@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PartyGames.Features.MemoryMatch.MemoryMatchPage"
+             Title="Memory Match"
+             BackgroundColor="#F5F5F5">
+
+    <!-- The header scrolls with the grid, so the whole page works in landscape -->
+    <CollectionView
+        ItemsSource="{Binding Cards}"
+        SelectionMode="None"
+        BackgroundColor="#F5F5F5"
+        Margin="0">
+
+        <CollectionView.ItemsLayout>
+            <GridItemsLayout
+                Orientation="Vertical"
+                Span="{Binding Columns}"
+                HorizontalItemSpacing="8"
+                VerticalItemSpacing="8" />
+        </CollectionView.ItemsLayout>
+
+        <CollectionView.Header>
+            <VerticalStackLayout Spacing="10" Padding="12,12,12,8">
+                <Border
+                    StrokeShape="RoundRectangle 15"
+                    Stroke="#E0E0E0"
+                    StrokeThickness="1"
+                    BackgroundColor="White"
+                    Padding="12,8">
+                    <VerticalStackLayout Spacing="2">
+                        <Label
+                            Text="MEMORY MATCH"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="#333333"
+                            HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="{Binding TimeText}"
+                            FontSize="28"
+                            FontAttributes="Bold"
+                            TextColor="#FF9500"
+                            HorizontalTextAlignment="Center" />
+                        <Label
+                            Text="{Binding BestText}"
+                            FontSize="14"
+                            TextColor="#666666"
+                            HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Button Text="Easy" CornerRadius="10" BackgroundColor="#FF9500" TextColor="#333333" FontAttributes="Bold"
+                            Command="{Binding StartCommand}" CommandParameter="Easy" />
+                    <Button Text="Medium" CornerRadius="10" BackgroundColor="#FF9500" TextColor="#333333" FontAttributes="Bold"
+                            Command="{Binding StartCommand}" CommandParameter="Medium" />
+                    <Button Text="Hard" CornerRadius="10" BackgroundColor="#FF9500" TextColor="#333333" FontAttributes="Bold"
+                            Command="{Binding StartCommand}" CommandParameter="Hard" />
+                </HorizontalStackLayout>
+
+                <Label
+                    Text="{Binding StatusMessage}"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    TextColor="#333333"
+                    HorizontalTextAlignment="Center" />
+
+                <!-- Win popup -->
+                <Border
+                    IsVisible="{Binding IsWinVisible}"
+                    BackgroundColor="White"
+                    Stroke="#FF9500"
+                    StrokeThickness="2"
+                    StrokeShape="RoundRectangle 15"
+                    Padding="16,10"
+                    HorizontalOptions="Center">
+                    <HorizontalStackLayout Spacing="12">
+                        <Label
+                            Text="{Binding WinMessage}"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="#333333"
+                            VerticalTextAlignment="Center" />
+                        <Button
+                            Text="Play Again"
+                            CornerRadius="10"
+                            BackgroundColor="#FF9500"
+                            TextColor="#333333"
+                            Command="{Binding NewGameCommand}" />
+                    </HorizontalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </CollectionView.Header>
+
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Border
+                    Background="{Binding CardBrush}"
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="0"
+                    HeightRequest="80">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnCardTapped"
+                            Command="{Binding BindingContext.FlipCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                            CommandParameter="{Binding .}" />
+                    </Border.GestureRecognizers>
+                    <Label
+                        Text="{Binding Symbol}"
+                        FontSize="30"
+                        FontAttributes="Bold"
+                        TextColor="#333333"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+                </Border>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</ContentPage>

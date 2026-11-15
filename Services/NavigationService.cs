@@ -2,6 +2,7 @@ using PartyGames.Features.Blackjack;
 using PartyGames.Features.CoinFlip;
 using PartyGames.Features.DiceRoller;
 using PartyGames.Features.HigherLower;
+using PartyGames.Features.MemoryMatch;
 using PartyGames.Features.TicTacToe;
 
 
@@ -34,6 +35,7 @@ namespace PartyGames.Services
                 "tictactoe" => new TicTacToePage(_serviceProvider.GetRequiredService<TicTacToeViewModel>()),
                 "higherlower" => new HigherLowerPage(_serviceProvider.GetRequiredService<HigherLowerViewModel>()),
                 "higherlowerplus" => new HigherLowerPage(_serviceProvider.GetRequiredService<HigherLowerPlusViewModel>()),
+                "memorymatch" => new MemoryMatchPage(_serviceProvider.GetRequiredService<MemoryMatchViewModel>()),
                 _ => throw new InvalidOperationException($"Unknown game type: {gameType}")
             };
 

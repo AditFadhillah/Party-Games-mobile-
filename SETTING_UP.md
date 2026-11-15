@@ -55,10 +55,13 @@ Either of these works:
   ```powershell
   & "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -avd Pixel_10
   ```
-   ```
+  ```
   & "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -avd Pixel_10 -no-snapshot-load
-   ```
-
+  ```
+  ```
+  Remove-Item -Recurse -Force "$env:USERPROFILE\.android\avd\Pixel_10.avd\snapshots\default_boot"
+  ```
+  
   Keep this terminal open while you work.
 
 - From Android Studio: open Device Manager and press the play button on the emulator. Android Studio does not need to stay open.

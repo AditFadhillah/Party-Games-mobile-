@@ -86,6 +86,12 @@ namespace PartyGames.Services
                     Id = 6,
                     Name = "Higher or Lower +",
                     GameType = "higherlowerplus"
+                },
+                new Game
+                {
+                    Id = 7,
+                    Name = "Memory Match",
+                    GameType = "memorymatch"
                 }
             };
         }
