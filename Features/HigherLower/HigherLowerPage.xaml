@@ -41,8 +41,9 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ScrollView BackgroundColor="#2D5016">
     <Grid
-        RowDefinitions="Auto,*,Auto"
+        RowDefinitions="Auto,Auto,Auto"
         RowSpacing="16"
         Padding="16"
         BackgroundColor="#2D5016">
@@ -88,7 +89,7 @@
             Grid.Row="1"
             RowDefinitions="90,*,*"
             ColumnDefinitions="*,*"
-            VerticalOptions="Fill">
+            HeightRequest="400">
 
             <Label
                 Grid.Row="0"
@@ -257,5 +258,6 @@
                 Command="{Binding PlayAgainCommand}" />
         </VerticalStackLayout>
     </Grid>
+    </ScrollView>
 
 </ContentPage>

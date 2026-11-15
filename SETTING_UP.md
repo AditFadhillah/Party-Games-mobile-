@@ -55,6 +55,9 @@ Either of these works:
   ```powershell
   & "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -avd Pixel_10
   ```
+   ```
+  & "$env:LOCALAPPDATA\Android\Sdk\emulator\emulator.exe" -avd Pixel_10 -no-snapshot-load
+   ```
 
   Keep this terminal open while you work.
 

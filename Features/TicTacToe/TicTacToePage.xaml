@@ -4,8 +4,9 @@
              x:Class="PartyGames.Features.TicTacToe.TicTacToePage"
              Title="Tic-Tac-Toe">
 
+    <ScrollView BackgroundColor="#F5F5F5">
     <Grid
-        RowDefinitions="Auto,*,Auto"
+        RowDefinitions="Auto,Auto,Auto"
         RowSpacing="16"
         Padding="16"
         BackgroundColor="#F5F5F5">
@@ -71,7 +72,6 @@
         <VerticalStackLayout
             Grid.Row="1"
             Spacing="14"
-            VerticalOptions="Center"
             IsVisible="{Binding IsModeSelected, Converter={StaticResource InvertedBoolConverter}}">
             <Label
                 Text="Choose a mode"
@@ -99,7 +99,6 @@
         <VerticalStackLayout
             Grid.Row="1"
             Spacing="14"
-            VerticalOptions="Center"
             IsVisible="{Binding IsModeSelected}">
 
             <Label
@@ -234,4 +233,5 @@
                 Command="{Binding ChangeModeCommand}" />
         </Grid>
     </Grid>
+    </ScrollView>
 </ContentPage>
